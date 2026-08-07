@@ -1,0 +1,90 @@
+get:
+  tags:
+    - "Relations"
+  summary: "Query relations by predicate, family, review status, or entity pair."
+  operationId: "queryRelations"
+  description: |
+    Queries registered relations by structural filters. This does not compute temporal state;
+    use `getProjectedRelations` or `getRelationStateAtTime` for time-indexed results.
+
+    For the edges of a **single** entity, use `getRelationsByEntity` (the canonical,
+    direction-aware, projection-aware adjacency primitive) — this operation deliberately does
+    not filter by a single endpoint. Use `betweenEntityIds` for the "relations between two
+    specific entities" case.
+  parameters:
+    - name: betweenEntityIds
+      in: query
+      required: false
+      description: "Restrict to relations whose endpoints are exactly this pair of entities (order-independent). Exactly two identifiers."
+      schema:
+        type: array
+        minItems: 2
+        maxItems: 2
+        items:
+          $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - name: predicate
+      in: query
+      required: false
+      description: "Filter by predicate."
+      schema:
+        type: string
+    - name: predicateFamily
+      in: query
+      required: false
+      description: "Filter by predicate family."
+      schema:
+        type: string
+    - name: reviewStatus
+      in: query
+      required: false
+      description: "Filter by review status."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/ReviewStatus'
+    - $ref: '../../openapi.yaml#/components/parameters/Cursor'
+  responses:
+    '200':
+      description: "A page of derived relations."
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '../../openapi.yaml#/components/schemas/Page'
+              - type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '../../openapi.yaml#/components/schemas/DerivedRelation'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'
+
+post:
+  tags:
+    - "Optional Authoring"
+  summary: "Create a DerivedRelation."
+  operationId: "createRelation"
+  description: |
+    Creates a `DerivedRelation`. The server SHOULD reject or flag a candidate that is
+    merge-compatible with an existing relation (see spec/03). Part of the optional Authoring
+    Conformance Class.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../openapi.yaml#/components/schemas/DerivedRelation'
+  responses:
+    '201':
+      description: "The created relation."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/DerivedRelation'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'
+    '409':
+      description: "The candidate is merge-compatible with an existing relation."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/Error'

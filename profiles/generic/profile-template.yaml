@@ -1,0 +1,52 @@
+# =============================================================================
+# TemporalGroundingProfile — template
+#
+# Copy this file to profiles/<your-profile>/profile.yaml and fill it in. It declares the
+# metadata of a grounding profile. The behavioral functions owner(evidenceUnit) and
+# admissible(sourceState, t) are exposed through the API's grounding operations; this
+# document declares HOW they behave, precisely enough that an auditor can reproduce a
+# temporal decision.
+#
+# Validates against: schemas/grounding/temporal-grounding-profile.schema.json
+# =============================================================================
+
+id: "example-generic-profile"
+name: "Example Generic Grounding Profile"
+version: "0.1.0"
+
+# The kind of evidence unit this profile controls (what EvidenceUnitRef.evidenceUnitId
+# points at) and the kind of source state that owns it.
+evidenceUnitType: "GenericEvidenceUnit"
+sourceStateType: "GenericSourceState"
+
+# A PRECISE statement of what "admissible at time t" means for this profile. This is the
+# authoritative definition the core defers to. Be explicit about the temporal axis used
+# (event time / applicability time / observation time) and about open/closed bounds.
+admissibilitySemantics: >-
+  A source state S is admissible at query time t (and optional observerTime o) iff
+  t falls within the half-open interval [S.admissibleFrom, S.admissibleTo) as recorded by
+  the substrate, and (when o is given) that interval was known as of o.
+
+description: >-
+  Replace with a description of the substrate this profile grounds and the provenance of
+  its source-state data.
+
+documentationUri: "https://example.invalid/profiles/generic"
+
+# Selector types this profile understands (see schemas/grounding/evidence-selector.schema.json).
+supportedSelectors:
+  - "textPosition"
+  - "jsonPointer"
+  - "fragmentId"
+
+# Temporal-coordinate kinds this profile understands.
+supportedTemporalCoordinates:
+  - "queryTime"
+  - "observerTime"
+
+# Optional default admission policy applied when the caller does not specify one.
+defaultAdmissionPolicyId: "strict-supported"
+
+metadata:
+  notes: >-
+    This is a template with obviously non-production values. Do not ship it as-is.

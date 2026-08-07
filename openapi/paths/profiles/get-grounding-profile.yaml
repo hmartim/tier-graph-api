@@ -1,0 +1,24 @@
+get:
+  tags:
+    - "Profiles"
+  summary: "Retrieve the declared semantics and capabilities of one grounding profile."
+  operationId: "getGroundingProfile"
+  description: |
+    Returns one `TemporalGroundingProfile`, including its declared `admissibilitySemantics`
+    — the authoritative definition of what "admissible at time t" means for this profile.
+  parameters:
+    - name: profileId
+      in: path
+      required: true
+      description: "Identifier of the grounding profile."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+  responses:
+    '200':
+      description: "The grounding profile."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/TemporalGroundingProfile'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/ProfileUnavailable'

@@ -1,0 +1,176 @@
+@prefix tier: <https://spec.tier-graph.org/ontology#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct:  <http://purl.org/dc/terms/> .
+
+#
+# TIER-Graph — lightweight ontology (first pass).
+#
+# This vocabulary mirrors the core JSON Schema data models. It is intentionally
+# lightweight: it declares classes and properties, but it does NOT attempt to encode
+# procedural merge/identity semantics in OWL (those require procedural validation — see
+# spec/03-relation-identity.md). Structural constraints are in tier-graph.shacl.ttl.
+#
+
+<https://spec.tier-graph.org/ontology> a owl:Ontology ;
+    dct:title "TIER-Graph Core Ontology" ;
+    owl:versionInfo "0.1.0-draft" ;
+    rdfs:comment "Temporally Indexed Evidence-Linked Relations Graph — core vocabulary." .
+
+# =============================================================================
+# Classes
+# =============================================================================
+
+tier:DerivedEntity a owl:Class ;
+    rdfs:label "DerivedEntity" ;
+    rdfs:comment "A normalized referent that participates in derived propositions. Identity is opaque; labels never define it." .
+
+tier:DerivedRelation a owl:Class ;
+    rdfs:label "DerivedRelation" ;
+    rdfs:comment "A normalized, qualified, defeasible proposition connecting two DerivedEntity objects." .
+
+tier:RelationQualifier a owl:Class ;
+    rdfs:label "RelationQualifier" ;
+    rdfs:comment "A truth-conditional dimension that may affect relation identity, with a status of specified, absent, or unknown." .
+
+tier:RelationEvidence a owl:Class ;
+    rdfs:label "RelationEvidence" ;
+    rdfs:comment "A record that a non-empty set of evidence units jointly supports or refutes one DerivedRelation." .
+
+tier:EvidenceAnchor a owl:Class ;
+    rdfs:label "EvidenceAnchor" ;
+    rdfs:comment "The association between one RelationEvidence record and one external evidence unit. Anchors within a record are conjunctive." .
+
+tier:EvidenceUnitRef a owl:Class ;
+    rdfs:label "EvidenceUnitRef" ;
+    rdfs:comment "A reference to an externally controlled unit of evidence (not a copy)." .
+
+tier:SourceStateRef a owl:Class ;
+    rdfs:label "SourceStateRef" ;
+    rdfs:comment "A reference to the temporally controlled state that owns an evidence unit." .
+
+tier:TemporalGroundingProfile a owl:Class ;
+    rdfs:label "TemporalGroundingProfile" ;
+    rdfs:comment "Declares owner resolution and temporal admissibility over an external source substrate." .
+
+tier:ProvenanceActivity a owl:Class ;
+    rdfs:label "ProvenanceActivity" ;
+    rdfs:comment "How an object was generated, reprocessed, reviewed, or verified. Confidence attaches here, not to evidence." .
+
+tier:ReviewEvent a owl:Class ;
+    rdfs:label "ReviewEvent" ;
+    rdfs:comment "An auditable transition in review status." .
+
+# =============================================================================
+# Enumerations (as classes of allowed literal values, documented for reference)
+# =============================================================================
+
+tier:ReviewStatus a owl:Class ;
+    rdfs:label "ReviewStatus" ;
+    rdfs:comment "One of: proposed, accepted, rejected, superseded." .
+
+tier:QualifierStatus a owl:Class ;
+    rdfs:label "QualifierStatus" ;
+    rdfs:comment "One of: specified, absent, unknown. 'unknown' is NOT equivalent to 'absent'." .
+
+tier:Stance a owl:Class ;
+    rdfs:label "Stance" ;
+    rdfs:comment "One of: supports, refutes. Stance is NOT proposition polarity." .
+
+tier:EvidentialState a owl:Class ;
+    rdfs:label "EvidentialState" ;
+    rdfs:comment "Computed state of a relation at a time: supported, refuted, contested, unsupported. An evidence state, not domain truth." .
+
+# =============================================================================
+# Datatype properties
+# =============================================================================
+
+tier:id a owl:DatatypeProperty ;
+    rdfs:label "id" ;
+    rdfs:comment "Opaque identifier. Identity is bound to this value." ;
+    rdfs:range xsd:string .
+
+tier:canonicalLabel a owl:DatatypeProperty ;
+    rdfs:domain tier:DerivedEntity ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Human-readable label; does not define identity." .
+
+tier:entityType a owl:DatatypeProperty ;
+    rdfs:domain tier:DerivedEntity ;
+    rdfs:range xsd:string .
+
+tier:predicate a owl:DatatypeProperty ;
+    rdfs:domain tier:DerivedRelation ;
+    rdfs:range xsd:string .
+
+tier:polarity a owl:DatatypeProperty ;
+    rdfs:domain tier:DerivedRelation ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The value of the required polarity qualifier. Distinct from evidence stance." .
+
+tier:qualifierStatus a owl:DatatypeProperty ;
+    rdfs:domain tier:RelationQualifier ;
+    rdfs:range xsd:string ;
+    rdfs:comment "specified | absent | unknown." .
+
+tier:qualifierDimension a owl:DatatypeProperty ;
+    rdfs:domain tier:RelationQualifier ;
+    rdfs:range xsd:string .
+
+tier:qualifierValue a owl:DatatypeProperty ;
+    rdfs:domain tier:RelationQualifier ;
+    rdfs:comment "Required when qualifierStatus = specified; absent otherwise." .
+
+tier:stance a owl:DatatypeProperty ;
+    rdfs:domain tier:RelationEvidence ;
+    rdfs:range xsd:string ;
+    rdfs:comment "supports | refutes." .
+
+tier:reviewStatus a owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:comment "proposed | accepted | rejected | superseded." .
+
+tier:confidence a owl:DatatypeProperty ;
+    rdfs:domain tier:ProvenanceActivity ;
+    rdfs:range xsd:decimal ;
+    rdfs:comment "Confidence of an activity/assessment — never of immutable evidence." .
+
+# =============================================================================
+# Object properties
+# =============================================================================
+
+tier:sourceEntity a owl:ObjectProperty ;
+    rdfs:domain tier:DerivedRelation ;
+    rdfs:range tier:DerivedEntity .
+
+tier:targetEntity a owl:ObjectProperty ;
+    rdfs:domain tier:DerivedRelation ;
+    rdfs:range tier:DerivedEntity .
+
+tier:hasQualifier a owl:ObjectProperty ;
+    rdfs:domain tier:DerivedRelation ;
+    rdfs:range tier:RelationQualifier .
+
+tier:evidenceOf a owl:ObjectProperty ;
+    rdfs:domain tier:RelationEvidence ;
+    rdfs:range tier:DerivedRelation ;
+    rdfs:comment "Each RelationEvidence bears on exactly one DerivedRelation." .
+
+tier:hasAnchor a owl:ObjectProperty ;
+    rdfs:domain tier:RelationEvidence ;
+    rdfs:range tier:EvidenceAnchor ;
+    rdfs:comment "At least one; anchors within a record are conjunctive." .
+
+tier:anchorsUnit a owl:ObjectProperty ;
+    rdfs:domain tier:EvidenceAnchor ;
+    rdfs:range tier:EvidenceUnitRef .
+
+tier:ownedBy a owl:ObjectProperty ;
+    rdfs:domain tier:EvidenceUnitRef ;
+    rdfs:range tier:SourceStateRef ;
+    rdfs:comment "Resolved by the grounding profile's owner function; not stored authoritatively by the core." .
+
+tier:groundedBy a owl:ObjectProperty ;
+    rdfs:range tier:TemporalGroundingProfile .

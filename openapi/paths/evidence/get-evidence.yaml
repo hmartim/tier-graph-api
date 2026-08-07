@@ -1,0 +1,23 @@
+get:
+  tags:
+    - "Evidence"
+  summary: "Retrieve one RelationEvidence record."
+  operationId: "getEvidence"
+  description: |
+    Retrieves one `RelationEvidence` record, preserving conjunctive anchor semantics.
+  parameters:
+    - name: evidenceId
+      in: path
+      required: true
+      description: "Opaque identifier of the evidence record."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+  responses:
+    '200':
+      description: "The evidence record."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/RelationEvidence'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

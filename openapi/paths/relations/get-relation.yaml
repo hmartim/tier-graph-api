@@ -1,0 +1,24 @@
+get:
+  tags:
+    - "Relations"
+  summary: "Retrieve one DerivedRelation by its opaque identifier."
+  operationId: "getRelation"
+  description: |
+    Retrieves one `DerivedRelation` (the registered proposition and its qualifiers). This
+    does not compute temporal state; use `getRelationStateAtTime` for that.
+  parameters:
+    - name: relationId
+      in: path
+      required: true
+      description: "Opaque identifier of the relation."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+  responses:
+    '200':
+      description: "The derived relation."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/DerivedRelation'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

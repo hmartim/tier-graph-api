@@ -1,0 +1,33 @@
+get:
+  tags:
+    - "Profiles"
+  summary: "Resolve an external evidence unit to its owning source state."
+  operationId: "resolveSourceState"
+  description: |
+    Resolves an external evidence unit to the source state that controls its temporal
+    admissibility, via the profile's `owner` function.
+
+    **Conformance rule:** the result MUST come from the profile. TIER-Graph MUST NOT
+    fabricate or infer a competing source state.
+  parameters:
+    - name: profileId
+      in: path
+      required: true
+      description: "Identifier of the grounding profile."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - name: evidenceUnitId
+      in: path
+      required: true
+      description: "Opaque identifier of the external evidence unit."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+  responses:
+    '200':
+      description: "The owning source state."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/SourceStateRef'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

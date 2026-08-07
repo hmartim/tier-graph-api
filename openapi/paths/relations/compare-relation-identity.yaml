@@ -1,0 +1,26 @@
+post:
+  tags:
+    - "Relations"
+  summary: "Evaluate whether two relation candidates are merge-compatible."
+  operationId: "compareRelationIdentity"
+  description: |
+    Recommended optional function. Evaluates whether two relation candidates are
+    merge-compatible under the declared identity profile.
+
+    **Rule:** if any identity-relevant qualifier is `unknown`, the decision MUST NOT be
+    `equivalent` (see spec/03).
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../openapi.yaml#/components/schemas/CompareRelationIdentityRequest'
+  responses:
+    '200':
+      description: "The identity comparison decision."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/IdentityComparison'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'

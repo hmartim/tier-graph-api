@@ -1,0 +1,31 @@
+get:
+  tags:
+    - "Audit"
+  summary: "Explain why a relation is supported/refuted/contested/unsupported and admitted/excluded."
+  operationId: "explainRelationState"
+  description: |
+    Produces a machine-readable explanation of the relation's evidential state and admission
+    at a query time. The response is structured data; natural-language rendering MAY be added
+    by clients.
+  parameters:
+    - name: relationId
+      in: path
+      required: true
+      description: "Opaque identifier of the relation."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - $ref: '../../openapi.yaml#/components/parameters/ProfileId'
+    - $ref: '../../openapi.yaml#/components/parameters/At'
+    - $ref: '../../openapi.yaml#/components/parameters/ObserverTime'
+    - $ref: '../../openapi.yaml#/components/parameters/PolicyId'
+  responses:
+    '200':
+      description: "The structured state explanation."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/RelationStateExplanation'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

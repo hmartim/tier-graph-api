@@ -1,0 +1,48 @@
+name: Validate Specification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Validate OpenAPI, JSON Schemas, examples, and ontology
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install OpenAPI tooling
+        working-directory: openapi
+        run: npm install
+
+      - name: Validate OpenAPI contract
+        working-directory: openapi
+        run: npm run validate
+
+      - name: Install validation scripts
+        working-directory: scripts
+        run: npm install
+
+      - name: Validate JSON Schemas (2020-12)
+        working-directory: scripts
+        run: npm run validate:schemas
+
+      - name: Validate example instances
+        working-directory: scripts
+        run: npm run validate:examples
+
+      - name: Validate conformance definitions
+        working-directory: scripts
+        run: npm run validate:conformance
+
+      - name: Validate ontology (Turtle parse)
+        working-directory: scripts
+        run: npm run validate:rdf

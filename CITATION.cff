@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use the TIER-Graph API specification, please cite it as below."
+title: "TIER-Graph API: An Implementation-Neutral Specification for Temporally Indexed, Evidence-Linked Derived Relations"
+abstract: >-
+  TIER-Graph (Temporally Indexed Evidence-Linked Relations Graph) is an
+  implementation-neutral API specification for publishing, querying, and
+  auditing derived relational propositions whose evidence is linked to
+  externally controlled temporal source states through a declared grounding
+  profile. The specification separates three ontological objects
+  (DerivedEntity, DerivedRelation, RelationEvidence) from an external
+  authoritative source substrate, and computes time-indexed evidential state
+  from evidence admissibility rather than from copied source intervals.
+type: software
+authors:
+  - family-names: "de Martim"
+    given-names: "Hudson"
+repository-code: "https://github.com/hmartim/tier-graph-api"
+url: "https://github.com/hmartim/tier-graph-api"
+keywords:
+  - knowledge-graphs
+  - temporal-knowledge-graphs
+  - ontology
+  - provenance
+  - evidence
+  - graph-rag
+  - openapi
+  - json-schema
+  - shacl
+license: MIT
+version: 0.1.0-draft
+date-released: 2026-08-07

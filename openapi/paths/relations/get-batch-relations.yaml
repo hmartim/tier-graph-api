@@ -1,0 +1,25 @@
+post:
+  tags:
+    - "Relations"
+  summary: "Fetch several relations by id in one deterministic batch."
+  operationId: "getBatchRelations"
+  description: |
+    Deterministic batch fetch. Same per-object semantics as repeated `getRelation` calls; ids
+    not found are absent from the response.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../openapi.yaml#/components/schemas/GetBatchRequest'
+  responses:
+    '200':
+      description: "The found relations."
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../openapi.yaml#/components/schemas/DerivedRelation'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'

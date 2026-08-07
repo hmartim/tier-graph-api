@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.tier-graph.org/conformance/manifest.schema.json",
+  "title": "ConformanceManifest",
+  "description": "The conformance manifest: the normative catalog of conformance cases. Each case entry is a ConformanceCaseDefinition. This manifest defines conformance; an implementation repository (e.g. tier-graph-reference) supplies the executable fixtures and its own fixture manifest that MUST conform to this catalog.",
+  "type": "object",
+  "required": ["version", "conformanceClasses", "cases"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Version of the conformance catalog.",
+      "minLength": 1
+    },
+    "conformanceClasses": {
+      "type": "array",
+      "description": "The conformance classes an implementation may claim.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": ["core-model", "temporal-grounding", "query-api", "path", "authoring", "analytical-extension"]
+          },
+          "name": { "type": "string", "minLength": 1 },
+          "optional": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "cases": {
+      "type": "array",
+      "description": "The catalog of conformance cases (T01–T10).",
+      "minItems": 1,
+      "items": { "$ref": "./case-definition.schema.json" }
+    }
+  },
+  "additionalProperties": false
+}

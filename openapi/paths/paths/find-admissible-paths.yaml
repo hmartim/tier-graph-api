@@ -1,0 +1,40 @@
+post:
+  tags:
+    - "Paths"
+  summary: "Find admissible paths in a time-indexed projection (CQ7)."
+  operationId: "findAdmissiblePaths"
+  description: |
+    Answers CQ7. Finds paths in a graph projection constructed for one time, profile, and
+    policy.
+
+    **Critical rule:** candidate generation MUST be constrained by the time-indexed
+    projected graph. An implementation MUST NOT traverse an all-time graph and merely filter
+    citations afterward while claiming temporal-topology conformance (see spec/08).
+
+    **Non-empty paths.** This operation returns *relational* paths and therefore only
+    non-empty ones: a query whose source and target entities are identical does NOT yield a
+    zero-length path. A zero-step answer would carry no evidence and no admissibility to
+    report.
+
+    **Admission is not support.** A returned path is `admissible` when every step was
+    admitted by the policy. Under a recall-oriented policy that admits `refuted` or
+    `contested` states, an admissible path may contain steps that are not supported. Every
+    step carries its own `evidentialState`; a consumer requiring a positively supported
+    chain MUST check that each step's state is `supported`.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../openapi.yaml#/components/schemas/FindAdmissiblePathsRequest'
+  responses:
+    '200':
+      description: "The admissible grounded paths."
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../openapi.yaml#/components/schemas/GroundedPath'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'

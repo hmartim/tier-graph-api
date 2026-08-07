@@ -1,0 +1,29 @@
+post:
+  tags:
+    - "Entities"
+  summary: "Resolve candidate entities for a mention or external identifier (optional)."
+  operationId: "resolveEntityCandidates"
+  description: |
+    Returns ranked candidate derived entities for a natural-language mention or external
+    identifier.
+
+    **Boundary:** this operation MAY be probabilistic. It MUST NOT silently select a
+    canonical entity when identity confidence is below the implementation's declared
+    threshold.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../openapi.yaml#/components/schemas/ResolveEntityCandidatesRequest'
+  responses:
+    '200':
+      description: "Ranked candidates with confidence and match type."
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../openapi.yaml#/components/schemas/EntityCandidate'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'

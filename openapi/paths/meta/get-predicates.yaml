@@ -1,0 +1,36 @@
+get:
+  tags:
+    - "Introspection"
+  summary: "Retrieve the predicate vocabulary."
+  operationId: "getPredicates"
+  description: |
+    Returns the predicate vocabulary an agent may use to form relation queries. The specific
+    vocabulary is profile-defined; pass `profileId` to scope it. Each entry names the
+    predicate and its coarse `predicateFamily`.
+  parameters:
+    - name: profileId
+      in: query
+      required: false
+      description: "Optional profile to scope the vocabulary."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+  responses:
+    '200':
+      description: "The predicate vocabulary."
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              required: ["predicate"]
+              properties:
+                predicate:
+                  type: string
+                  description: "The predicate token."
+                predicateFamily:
+                  type: string
+                  description: "The coarse family this predicate belongs to."
+                description:
+                  type: string
+              additionalProperties: false

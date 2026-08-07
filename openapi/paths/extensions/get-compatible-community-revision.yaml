@@ -1,0 +1,35 @@
+get:
+  tags:
+    - "Experimental Analytical Extensions"
+  summary: "Return a community revision proven compatible with a projection (experimental)."
+  operationId: "getCompatibleCommunityRevision"
+  description: |
+    EXPERIMENTAL. Returns a community revision proven compatible with the requested graph
+    projection. A community revision MUST NOT be reused for a projection unless compatibility
+    is proven (see spec/11).
+  parameters:
+    - $ref: '../../openapi.yaml#/components/parameters/ProfileId'
+    - $ref: '../../openapi.yaml#/components/parameters/At'
+    - name: policyId
+      in: query
+      required: true
+      description: "Admission policy."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - name: communityRevisionId
+      in: query
+      required: false
+      description: "Optional specific community revision to check for compatibility."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+  responses:
+    '200':
+      description: "A compatible community revision."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/CommunityRevision'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

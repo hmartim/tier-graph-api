@@ -1,0 +1,32 @@
+get:
+  tags:
+    - "Relations"
+  summary: "Compute a relation's evidential state at a query time (CQ3)."
+  operationId: "getRelationStateAtTime"
+  description: |
+    Computes the evidential state (`supported` / `refuted` / `contested` / `unsupported`)
+    of one relation at `at` under `profileId`, from the admissibility of its evidence
+    bases. The result is an `EvidentialStateSnapshot`. This is an EVIDENCE state, not a
+    declaration of domain truth, and is never read from a copied relation-level interval.
+  parameters:
+    - name: relationId
+      in: path
+      required: true
+      description: "Opaque identifier of the relation."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - $ref: '../../openapi.yaml#/components/parameters/ProfileId'
+    - $ref: '../../openapi.yaml#/components/parameters/At'
+    - $ref: '../../openapi.yaml#/components/parameters/ObserverTime'
+    - $ref: '../../openapi.yaml#/components/parameters/PolicyId'
+  responses:
+    '200':
+      description: "The computed evidential state snapshot."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/EvidentialStateSnapshot'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

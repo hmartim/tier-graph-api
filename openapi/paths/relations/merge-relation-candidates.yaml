@@ -1,0 +1,31 @@
+post:
+  tags:
+    - "Optional Authoring"
+  summary: "Merge merge-compatible relation candidates."
+  operationId: "mergeRelationCandidates"
+  description: |
+    Merges relation candidates. This operation SHOULD require explicit review authorization
+    and MUST NOT merge candidates if an identity-relevant qualifier is unresolved
+    (`unknown`). The merge is recorded through provenance and review so it stays auditable
+    and reversible.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../openapi.yaml#/components/schemas/MergeRelationCandidatesRequest'
+  responses:
+    '200':
+      description: "The surviving merged relation."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/DerivedRelation'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'
+    '409':
+      description: "Merge blocked — an identity-relevant qualifier is unresolved."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/Error'

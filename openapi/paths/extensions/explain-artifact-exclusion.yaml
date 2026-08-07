@@ -1,0 +1,25 @@
+post:
+  tags:
+    - "Experimental Analytical Extensions"
+  summary: "Explain why an analytical artifact was excluded from a projection (experimental)."
+  operationId: "explainArtifactExclusion"
+  description: |
+    EXPERIMENTAL. Explains why a community revision or causal gate was excluded from a
+    time-indexed projection because of temporal-topology incompatibility.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../openapi.yaml#/components/schemas/ExplainArtifactExclusionRequest'
+  responses:
+    '200':
+      description: "One or more exclusion explanations."
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../openapi.yaml#/components/schemas/ExclusionExplanation'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'

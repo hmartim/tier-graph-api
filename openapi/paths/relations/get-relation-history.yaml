@@ -1,0 +1,44 @@
+get:
+  tags:
+    - "Relations"
+  summary: "Return state periods or transitions for one relation (CQ5/CQ6)."
+  operationId: "getRelationHistory"
+  description: |
+    Answers CQ5 and CQ6 by returning ordered `RelationHistoryEntry` objects. The history is
+    COMPUTED from evidence and source-state admissibility; the API MUST NOT require a copied
+    relation-level temporal interval.
+  parameters:
+    - name: relationId
+      in: path
+      required: true
+      description: "Opaque identifier of the relation."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - $ref: '../../openapi.yaml#/components/parameters/ProfileId'
+    - name: startAt
+      in: query
+      required: false
+      description: "Optional inclusive start of the window of interest."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/TemporalCoordinate'
+    - name: endAt
+      in: query
+      required: false
+      description: "Optional exclusive end of the window of interest."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/TemporalCoordinate'
+    - $ref: '../../openapi.yaml#/components/parameters/ObserverTime'
+    - $ref: '../../openapi.yaml#/components/parameters/PolicyId'
+  responses:
+    '200':
+      description: "Ordered relation-history entries."
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../openapi.yaml#/components/schemas/RelationHistoryEntry'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

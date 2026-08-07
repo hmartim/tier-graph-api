@@ -1,0 +1,25 @@
+post:
+  tags:
+    - "Profiles"
+  summary: "Evaluate several evidence records in one deterministic batch."
+  operationId: "evaluateBatchEvidenceAdmissibility"
+  description: |
+    A convenience primitive. It MUST preserve the same semantics as repeated single
+    `evaluateEvidenceAdmissibility` calls.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../openapi.yaml#/components/schemas/EvaluateBatchEvidenceAdmissibilityRequest'
+  responses:
+    '200':
+      description: "A list of evidence-level admissibility results."
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../openapi.yaml#/components/schemas/AdmissibilityResult'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'

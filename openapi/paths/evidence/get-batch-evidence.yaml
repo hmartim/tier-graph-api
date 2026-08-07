@@ -1,0 +1,25 @@
+post:
+  tags:
+    - "Evidence"
+  summary: "Fetch several evidence records by id in one deterministic batch."
+  operationId: "getBatchEvidence"
+  description: |
+    Deterministic batch fetch. Same per-object semantics as repeated `getEvidence` calls; ids
+    not found are absent from the response.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../openapi.yaml#/components/schemas/GetBatchRequest'
+  responses:
+    '200':
+      description: "The found evidence records."
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../openapi.yaml#/components/schemas/RelationEvidence'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'

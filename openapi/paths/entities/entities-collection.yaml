@@ -1,0 +1,75 @@
+get:
+  tags:
+    - "Entities"
+  summary: "Query (filter) derived entities."
+  operationId: "queryEntities"
+  description: |
+    Lists derived entities, optionally filtered by type, review status, external
+    identifier, or label. **Label search is not identity resolution** — use
+    `resolveEntityCandidates` for that.
+  parameters:
+    - name: entityType
+      in: query
+      required: false
+      description: "Filter by entity type."
+      schema:
+        type: string
+    - name: reviewStatus
+      in: query
+      required: false
+      description: "Filter by review status."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/ReviewStatus'
+    - name: externalIdentifier
+      in: query
+      required: false
+      description: "Filter by an external identifier value."
+      schema:
+        type: string
+    - name: label
+      in: query
+      required: false
+      description: "Label substring search (NOT identity resolution)."
+      schema:
+        type: string
+    - $ref: '../../openapi.yaml#/components/parameters/Cursor'
+  responses:
+    '200':
+      description: "A page of derived entities."
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '../../openapi.yaml#/components/schemas/Page'
+              - type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '../../openapi.yaml#/components/schemas/DerivedEntity'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'
+
+post:
+  tags:
+    - "Optional Authoring"
+  summary: "Create a proposed or accepted DerivedEntity."
+  operationId: "createEntity"
+  description: |
+    Creates a `DerivedEntity`. The server MAY assign the opaque `id` if omitted. Part of the
+    optional Authoring Conformance Class.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../openapi.yaml#/components/schemas/DerivedEntity'
+  responses:
+    '201':
+      description: "The created entity."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/DerivedEntity'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'

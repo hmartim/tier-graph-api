@@ -1,0 +1,45 @@
+get:
+  tags:
+    - "Evidence"
+  summary: "Find all relations linked to an external evidence unit (CQ4)."
+  operationId: "getRelationsByEvidenceUnit"
+  description: |
+    Answers CQ4. Returns the relations whose evidence anchors the given external evidence
+    unit. With `at` and `policyId`, results MAY be time-indexed.
+  parameters:
+    - name: profileId
+      in: path
+      required: true
+      description: "Identifier of the grounding profile controlling the evidence unit."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - name: evidenceUnitId
+      in: path
+      required: true
+      description: "Opaque identifier of the external evidence unit."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - name: at
+      in: query
+      required: false
+      description: "Optional query time for time-indexed results."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/TemporalCoordinate'
+    - $ref: '../../openapi.yaml#/components/parameters/PolicyId'
+    - $ref: '../../openapi.yaml#/components/parameters/Cursor'
+  responses:
+    '200':
+      description: "A page of relations linked to the evidence unit."
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '../../openapi.yaml#/components/schemas/Page'
+              - type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '../../openapi.yaml#/components/schemas/DerivedRelation'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

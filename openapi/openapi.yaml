@@ -1,0 +1,338 @@
+openapi: 3.1.0
+
+info:
+  title: "TIER-Graph API"
+  version: "0.1.0-draft"
+  summary: "Temporally Indexed Evidence-Linked Relations Graph API."
+  description: |
+    Implementation-neutral contract for publishing, querying, and auditing **derived
+    relational propositions** whose evidence is linked to **externally controlled temporal
+    source states** through a declared `TemporalGroundingProfile`.
+
+    This is a **specification**, not a service implementation. See the normative prose in
+    [`spec/`](../spec/) and the data models in [`schemas/`](../schemas/) (JSON Schema
+    2020-12, referenced below via `$ref`).
+
+    The contract defines the required query and grounding primitives, the path operations,
+    audit operations, and the optional authoring and experimental analytical-extension
+    operations (see `spec/07-api-primitives.md`). The HTTP bindings below are the RECOMMENDED
+    ones; an implementation MAY re-bind them while preserving operation semantics.
+  license:
+    name: MIT
+    identifier: MIT
+  contact:
+    name: TIER-Graph API maintainers
+
+servers:
+  - url: "https://example.invalid/tier-graph/v0"
+    description: "Illustrative base URL only. This specification hosts no service."
+
+tags:
+  - name: Profiles
+    description: "Temporal grounding profiles and admissibility evaluation."
+  - name: Policies
+    description: "Admission-policy discovery."
+  - name: Introspection
+    description: "Reasoning-vocabulary discovery (predicates, families, qualifier dimensions, entity types)."
+  - name: Entities
+    description: "Derived entities (normalized referents)."
+  - name: Relations
+    description: "Derived relations, their evidence, state, and history."
+  - name: Evidence
+    description: "Evidence records, anchors, and reverse lookup by evidence unit."
+  - name: Temporal Projection
+    description: "Time-indexed graph projections and projected relations."
+  - name: Paths
+    description: "Admissible paths over a time-indexed projection."
+  - name: Audit
+    description: "Consolidated audit trails and structured state explanations."
+  - name: Optional Authoring
+    description: "Optional authoring operations (Authoring Conformance Class)."
+  - name: Experimental Analytical Extensions
+    description: "Experimental community/gate operations. Not part of core conformance."
+
+# =============================================================================
+# Components
+# =============================================================================
+components:
+  schemas:
+    # --- common ---------------------------------------------------------------
+    Identifier:
+      $ref: '../schemas/common/identifier.schema.json'
+    TemporalCoordinate:
+      $ref: '../schemas/common/temporal-coordinate.schema.json'
+    Page:
+      $ref: '../schemas/common/page.schema.json'
+    Error:
+      $ref: '../schemas/common/error.schema.json'
+    ReviewStatus:
+      $ref: '../schemas/common/review-status.schema.json'
+    EvidentialState:
+      $ref: '../schemas/common/evidential-state.schema.json'
+    ExternalIdentifier:
+      $ref: '../schemas/common/external-identifier.schema.json'
+    AgentRef:
+      $ref: '../schemas/common/agent-ref.schema.json'
+
+    # --- core -----------------------------------------------------------------
+    DerivedEntity:
+      $ref: '../schemas/core/derived-entity.schema.json'
+    RelationQualifier:
+      $ref: '../schemas/core/relation-qualifier.schema.json'
+    DerivedRelation:
+      $ref: '../schemas/core/derived-relation.schema.json'
+    EvidenceAnchor:
+      $ref: '../schemas/core/evidence-anchor.schema.json'
+    RelationEvidence:
+      $ref: '../schemas/core/relation-evidence.schema.json'
+    ProvenanceActivity:
+      $ref: '../schemas/core/provenance-activity.schema.json'
+    ReviewEvent:
+      $ref: '../schemas/core/review-event.schema.json'
+
+    # --- grounding ------------------------------------------------------------
+    EvidenceUnitRef:
+      $ref: '../schemas/grounding/evidence-unit-ref.schema.json'
+    EvidenceSelector:
+      $ref: '../schemas/grounding/evidence-selector.schema.json'
+    SourceStateRef:
+      $ref: '../schemas/grounding/source-state-ref.schema.json'
+    TemporalGroundingProfile:
+      $ref: '../schemas/grounding/temporal-grounding-profile.schema.json'
+    AdmissionPolicy:
+      $ref: '../schemas/grounding/admission-policy.schema.json'
+    AdmissibilityResult:
+      $ref: '../schemas/grounding/admissibility-result.schema.json'
+
+    # --- query ----------------------------------------------------------------
+    EvidentialStateSnapshot:
+      $ref: '../schemas/query/evidential-state-snapshot.schema.json'
+    RelationHistoryEntry:
+      $ref: '../schemas/query/relation-history-entry.schema.json'
+    ProjectedRelation:
+      $ref: '../schemas/query/projected-relation.schema.json'
+    PathStep:
+      $ref: '../schemas/query/path-step.schema.json'
+    GroundedPath:
+      $ref: '../schemas/query/grounded-path.schema.json'
+    ExclusionExplanation:
+      $ref: '../schemas/query/exclusion-explanation.schema.json'
+
+    # --- query (composite responses) ------------------------------------------
+    EntityCandidate:
+      $ref: '../schemas/query/entity-candidate.schema.json'
+    IdentityComparison:
+      $ref: '../schemas/query/identity-comparison.schema.json'
+    ProjectionMetadata:
+      $ref: '../schemas/query/projection-metadata.schema.json'
+    RelationAuditTrail:
+      $ref: '../schemas/query/relation-audit-trail.schema.json'
+    EvidenceAuditTrail:
+      $ref: '../schemas/query/evidence-audit-trail.schema.json'
+    RelationStateExplanation:
+      $ref: '../schemas/query/relation-state-explanation.schema.json'
+
+    # --- request bodies -------------------------------------------------------
+    EvaluateBatchEvidenceAdmissibilityRequest:
+      $ref: '../schemas/requests/evaluate-batch-evidence-admissibility-request.schema.json'
+    ResolveEntityCandidatesRequest:
+      $ref: '../schemas/requests/resolve-entity-candidates-request.schema.json'
+    CompareRelationIdentityRequest:
+      $ref: '../schemas/requests/compare-relation-identity-request.schema.json'
+    FindAdmissiblePathsRequest:
+      $ref: '../schemas/requests/find-admissible-paths-request.schema.json'
+    ValidatePathRequest:
+      $ref: '../schemas/requests/validate-path-request.schema.json'
+    ExplainPathExclusionRequest:
+      $ref: '../schemas/requests/explain-path-exclusion-request.schema.json'
+    MergeRelationCandidatesRequest:
+      $ref: '../schemas/requests/merge-relation-candidates-request.schema.json'
+    ExplainArtifactExclusionRequest:
+      $ref: '../schemas/requests/explain-artifact-exclusion-request.schema.json'
+    GetBatchRequest:
+      $ref: '../schemas/requests/get-batch-request.schema.json'
+
+    # --- optional extensions --------------------------------------------------
+    CommunityRevision:
+      $ref: '../schemas/optional/community-revision.schema.json'
+    CausalGate:
+      $ref: '../schemas/optional/causal-gate.schema.json'
+
+  parameters:
+    ProfileId:
+      name: profileId
+      in: query
+      required: true
+      description: "Identifier of the TemporalGroundingProfile to ground the query."
+      schema:
+        $ref: '../schemas/common/identifier.schema.json'
+    At:
+      name: at
+      in: query
+      required: true
+      description: "Query time (the time being asked about)."
+      schema:
+        $ref: '../schemas/common/temporal-coordinate.schema.json'
+    ObserverTime:
+      name: observerTime
+      in: query
+      required: false
+      description: "Optional observer time for bitemporal evaluation."
+      schema:
+        $ref: '../schemas/common/temporal-coordinate.schema.json'
+    PolicyId:
+      name: policyId
+      in: query
+      required: false
+      description: "Admission policy to apply to the projection."
+      schema:
+        $ref: '../schemas/common/identifier.schema.json'
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      description: "Opaque pagination cursor from a previous Page response."
+      schema:
+        type: string
+        minLength: 1
+
+  responses:
+    BadRequest:
+      description: "The request is malformed or a parameter is invalid."
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: "INVALID_PARAMETER"
+            message: "The 'at' parameter must be an RFC 3339 date or date-time."
+    NotFound:
+      description: "The requested resource was not found."
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: "RESOURCE_NOT_FOUND"
+            message: "No relation found with the specified id."
+    ProfileUnavailable:
+      description: "The requested grounding profile is not available."
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: "PROFILE_UNAVAILABLE"
+            message: "No grounding profile registered with the specified id."
+
+# =============================================================================
+# API Endpoints
+# =============================================================================
+paths:
+  # --- Profiles & Grounding ---------------------------------------------------
+  /profiles:
+    $ref: './paths/profiles/get-grounding-profiles.yaml'
+  /profiles/{profileId}:
+    $ref: './paths/profiles/get-grounding-profile.yaml'
+  /profiles/{profileId}/evidence-units/{evidenceUnitId}/source-state:
+    $ref: './paths/profiles/resolve-source-state.yaml'
+  /profiles/{profileId}/source-states/{sourceStateId}/admissibility:
+    $ref: './paths/profiles/evaluate-source-state-admissibility.yaml'
+  /profiles/{profileId}/evidence-units/{evidenceUnitId}/relations:
+    $ref: './paths/evidence/get-relations-by-evidence-unit.yaml'
+
+  # --- Policies ---------------------------------------------------------------
+  /policies:
+    $ref: './paths/policies/get-admission-policies.yaml'
+  /policies/{policyId}:
+    $ref: './paths/policies/get-admission-policy.yaml'
+
+  # --- Introspection (reasoning vocabulary) -----------------------------------
+  /meta/predicates:
+    $ref: './paths/meta/get-predicates.yaml'
+  /meta/predicate-families:
+    $ref: './paths/meta/get-predicate-families.yaml'
+  /meta/qualifier-dimensions:
+    $ref: './paths/meta/get-qualifier-dimensions.yaml'
+  /meta/entity-types:
+    $ref: './paths/meta/get-entity-types.yaml'
+
+  # --- Entities ---------------------------------------------------------------
+  /entities:
+    $ref: './paths/entities/entities-collection.yaml'
+  /entities:resolve:
+    $ref: './paths/entities/resolve-entities.yaml'
+  /entities:batch-get:
+    $ref: './paths/entities/get-batch-entities.yaml'
+  /entities/{entityId}:
+    $ref: './paths/entities/get-entity.yaml'
+  /entities/{entityId}/relations:
+    $ref: './paths/entities/get-relations-by-entity.yaml'
+
+  # --- Relations --------------------------------------------------------------
+  /relations:
+    $ref: './paths/relations/relations-collection.yaml'
+  /relations:compare-identity:
+    $ref: './paths/relations/compare-relation-identity.yaml'
+  /relations:changes:
+    $ref: './paths/relations/get-relations-changing-at-boundary.yaml'
+  /relations:merge:
+    $ref: './paths/relations/merge-relation-candidates.yaml'
+  /relations:batch-get:
+    $ref: './paths/relations/get-batch-relations.yaml'
+  /relations/{relationId}:
+    $ref: './paths/relations/get-relation.yaml'
+  /relations/{relationId}/evidence:
+    $ref: './paths/relations/get-relation-evidence.yaml'
+  /relations/{relationId}/state:
+    $ref: './paths/relations/get-relation-state.yaml'
+  /relations/{relationId}/history:
+    $ref: './paths/relations/get-relation-history.yaml'
+  /relations/{relationId}/audit-trail:
+    $ref: './paths/relations/get-relation-audit-trail.yaml'
+  /relations/{relationId}/explanation:
+    $ref: './paths/relations/explain-relation-state.yaml'
+
+  # --- Evidence ---------------------------------------------------------------
+  /evidence:
+    $ref: './paths/evidence/evidence-collection.yaml'
+  /evidence:batch-get:
+    $ref: './paths/evidence/get-batch-evidence.yaml'
+  /evidence/admissibility:batch:
+    $ref: './paths/evidence/evaluate-batch-evidence-admissibility.yaml'
+  /evidence/{evidenceId}:
+    $ref: './paths/evidence/get-evidence.yaml'
+  /evidence/{evidenceId}/admissibility:
+    $ref: './paths/evidence/evaluate-evidence-admissibility.yaml'
+  /evidence/{evidenceId}/activities:
+    $ref: './paths/evidence/get-evidence-activities.yaml'
+  /evidence/{evidenceId}/audit-trail:
+    $ref: './paths/evidence/get-evidence-audit-trail.yaml'
+
+  # --- Temporal Projection ----------------------------------------------------
+  /projections/relations:
+    $ref: './paths/projection/get-projected-relations.yaml'
+  /projections/metadata:
+    $ref: './paths/projection/get-projection-metadata.yaml'
+
+  # --- Paths ------------------------------------------------------------------
+  /paths:search:
+    $ref: './paths/paths/find-admissible-paths.yaml'
+  /paths:validate:
+    $ref: './paths/paths/validate-path-at-time.yaml'
+  /paths:explain-exclusion:
+    $ref: './paths/paths/explain-path-exclusion.yaml'
+
+  # --- Optional Authoring (subjects) ------------------------------------------
+  /subjects/{subjectId}/activities:
+    $ref: './paths/authoring/append-provenance-activity.yaml'
+  /subjects/{subjectId}/review-events:
+    $ref: './paths/authoring/record-review-event.yaml'
+
+  # --- Experimental Analytical Extensions -------------------------------------
+  /projections/community-revisions:
+    $ref: './paths/extensions/get-compatible-community-revision.yaml'
+  /projections/causal-gates:
+    $ref: './paths/extensions/get-active-causal-gates.yaml'
+  /projections:explain-artifact-exclusion:
+    $ref: './paths/extensions/explain-artifact-exclusion.yaml'

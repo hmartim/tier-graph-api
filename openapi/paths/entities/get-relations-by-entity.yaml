@@ -1,0 +1,75 @@
+get:
+  tags:
+    - "Entities"
+  summary: "Relations in which an entity participates — single-hop adjacency (CQ1)."
+  operationId: "getRelationsByEntity"
+  description: |
+    Answers CQ1. This is the canonical **single-hop adjacency** primitive for an entity.
+
+    Without temporal parameters, returns registered `DerivedRelation`s. With `at` and
+    `profileId` (and optional `policyId`), it returns time-indexed `ProjectedRelation`s
+    constrained to the projection for that coordinate — each carrying its `evidentialState`
+    and `admitted` flag. In this temporal mode the result is **projection-constrained**: an
+    agent composing multi-hop traversal from these edges inherits the same
+    no-temporal-topology-leakage guarantee as `findAdmissiblePaths` (see spec/08). It MUST NOT
+    return an edge that is not admitted into the projection at the requested coordinate.
+  parameters:
+    - name: entityId
+      in: path
+      required: true
+      description: "Opaque identifier of the entity."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - name: direction
+      in: query
+      required: false
+      description: "Filter by traversal direction relative to the entity."
+      schema:
+        type: string
+        enum: ["outgoing", "incoming", "both"]
+    - name: predicateFamily
+      in: query
+      required: false
+      description: "Filter by predicate family."
+      schema:
+        type: string
+    - name: state
+      in: query
+      required: false
+      description: "Filter by evidential state (requires temporal parameters)."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/EvidentialState'
+    - name: at
+      in: query
+      required: false
+      description: "Query time; when present with profileId, results are time-indexed."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/TemporalCoordinate'
+    - name: profileId
+      in: query
+      required: false
+      description: "Grounding profile; required for time-indexed results."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - $ref: '../../openapi.yaml#/components/parameters/PolicyId'
+    - $ref: '../../openapi.yaml#/components/parameters/Cursor'
+  responses:
+    '200':
+      description: "A page of relations (registered) or projected relations (time-indexed)."
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '../../openapi.yaml#/components/schemas/Page'
+              - type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      oneOf:
+                        - $ref: '../../openapi.yaml#/components/schemas/DerivedRelation'
+                        - $ref: '../../openapi.yaml#/components/schemas/ProjectedRelation'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

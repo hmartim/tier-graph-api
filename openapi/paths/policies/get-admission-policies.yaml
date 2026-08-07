@@ -1,0 +1,27 @@
+get:
+  tags:
+    - "Policies"
+  summary: "Retrieve the admission policies exposed by the implementation."
+  operationId: "getAdmissionPolicies"
+  description: |
+    Returns the `AdmissionPolicy` objects an agent may reference by `policyId` in projection,
+    state, and path operations. Because `policyId` parametrizes those operations, this
+    discovery primitive is required for an agent to *choose* a policy rather than hard-code one.
+  parameters:
+    - $ref: '../../openapi.yaml#/components/parameters/Cursor'
+  responses:
+    '200':
+      description: "A page of admission policies."
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '../../openapi.yaml#/components/schemas/Page'
+              - type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '../../openapi.yaml#/components/schemas/AdmissionPolicy'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'

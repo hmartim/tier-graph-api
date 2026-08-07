@@ -1,0 +1,25 @@
+post:
+  tags:
+    - "Entities"
+  summary: "Fetch several entities by id in one deterministic batch."
+  operationId: "getBatchEntities"
+  description: |
+    Deterministic batch fetch that collapses an agent plan's round-trips. Same per-object
+    semantics as repeated `getEntity` calls; ids not found are absent from the response.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../openapi.yaml#/components/schemas/GetBatchRequest'
+  responses:
+    '200':
+      description: "The found entities."
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../openapi.yaml#/components/schemas/DerivedEntity'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'

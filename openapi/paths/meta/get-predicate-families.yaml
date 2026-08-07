@@ -1,0 +1,26 @@
+get:
+  tags:
+    - "Introspection"
+  summary: "Retrieve the predicate families recognized by the base specification."
+  operationId: "getPredicateFamilies"
+  description: |
+    Returns the coarse predicate families used to filter relations. The base specification
+    recognizes a fixed set; a profile MAY document which of its predicates map to each family.
+  responses:
+    '200':
+      description: "The predicate families."
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - "classificatory"
+                - "definitional"
+                - "normativeDependency"
+                - "institutional"
+                - "procedural"
+                - "factualCausal"
+                - "attributional"
+                - "normativeConsequential"

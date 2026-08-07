@@ -1,0 +1,35 @@
+get:
+  tags:
+    - "Profiles"
+  summary: "Determine whether a source state may ground a query at a temporal coordinate."
+  operationId: "evaluateSourceStateAdmissibility"
+  description: |
+    Evaluates whether a controlled source state is admissible at `at` (and optional
+    `observerTime`) under the profile's `admissible` function. The decision comes from the
+    profile; TIER-Graph MUST NOT override it.
+  parameters:
+    - name: profileId
+      in: path
+      required: true
+      description: "Identifier of the grounding profile."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - name: sourceStateId
+      in: path
+      required: true
+      description: "Opaque identifier of the source state."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - $ref: '../../openapi.yaml#/components/parameters/At'
+    - $ref: '../../openapi.yaml#/components/parameters/ObserverTime'
+  responses:
+    '200':
+      description: "The admissibility decision."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/AdmissibilityResult'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

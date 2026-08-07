@@ -1,0 +1,83 @@
+get:
+  tags:
+    - "Evidence"
+  summary: "Query evidence records by stance, review status, evidence unit, or activity."
+  operationId: "queryEvidence"
+  description: |
+    Queries evidence records by structural filters. For the evidence bases of a **single**
+    relation, use `getRelationEvidence` (the canonical relation → evidence adjacency); this
+    operation deliberately does not filter by `relationId`.
+  parameters:
+    - name: stance
+      in: query
+      required: false
+      description: "Filter by stance."
+      schema:
+        type: string
+        enum: ["supports", "refutes"]
+    - name: reviewStatus
+      in: query
+      required: false
+      description: "Filter by review status."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/ReviewStatus'
+    - name: evidenceUnitId
+      in: query
+      required: false
+      description: "Filter by an anchored evidence unit."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - name: provenanceActivityId
+      in: query
+      required: false
+      description: "Filter by a provenance activity."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - $ref: '../../openapi.yaml#/components/parameters/Cursor'
+  responses:
+    '200':
+      description: "A page of evidence records."
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '../../openapi.yaml#/components/schemas/Page'
+              - type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '../../openapi.yaml#/components/schemas/RelationEvidence'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'
+
+post:
+  tags:
+    - "Optional Authoring"
+  summary: "Create a RelationEvidence record."
+  operationId: "createEvidence"
+  description: |
+    Creates a `RelationEvidence` record. The server MUST preserve conjunctive semantics
+    within the record and SHOULD detect duplicate `EvidenceKey` values (re-extraction MUST
+    NOT create false independent evidence). Part of the optional Authoring Conformance Class.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../openapi.yaml#/components/schemas/RelationEvidence'
+  responses:
+    '201':
+      description: "The created evidence record."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/RelationEvidence'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'
+    '409':
+      description: "Duplicate EvidenceKey — a matching evidence occurrence already exists."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/Error'

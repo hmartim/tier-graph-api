@@ -1,0 +1,24 @@
+get:
+  tags:
+    - "Policies"
+  summary: "Retrieve one admission policy by its identifier."
+  operationId: "getAdmissionPolicy"
+  description: |
+    Retrieves one `AdmissionPolicy`, including its `admittedStates` and version — so an agent
+    can inspect exactly which evidential states a projection will admit before using it.
+  parameters:
+    - name: policyId
+      in: path
+      required: true
+      description: "Identifier of the admission policy."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+  responses:
+    '200':
+      description: "The admission policy."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/AdmissionPolicy'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

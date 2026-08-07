@@ -1,0 +1,27 @@
+get:
+  tags:
+    - "Profiles"
+  summary: "Retrieve the temporal grounding profiles exposed by the implementation."
+  operationId: "getGroundingProfiles"
+  description: |
+    Lists the `TemporalGroundingProfile` objects this implementation exposes. Each profile
+    declares how external evidence units are resolved to controlled source states and what
+    temporal admissibility means.
+  parameters:
+    - $ref: '../../openapi.yaml#/components/parameters/Cursor'
+  responses:
+    '200':
+      description: "A page of grounding profiles."
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '../../openapi.yaml#/components/schemas/Page'
+              - type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '../../openapi.yaml#/components/schemas/TemporalGroundingProfile'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'

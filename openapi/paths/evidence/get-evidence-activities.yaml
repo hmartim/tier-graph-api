@@ -1,0 +1,27 @@
+get:
+  tags:
+    - "Evidence"
+  summary: "Retrieve provenance activities for one evidence occurrence."
+  operationId: "getEvidenceActivities"
+  description: |
+    Retrieves extraction, reprocessing, review, and verification activities for one evidence
+    occurrence. Multiple activities over the same occurrence MUST NOT inflate independent
+    evidence count.
+  parameters:
+    - name: evidenceId
+      in: path
+      required: true
+      description: "Opaque identifier of the evidence record."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+  responses:
+    '200':
+      description: "The provenance activities for the evidence occurrence."
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../openapi.yaml#/components/schemas/ProvenanceActivity'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

@@ -1,0 +1,115 @@
+@prefix tier: <https://spec.tier-graph.org/ontology#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+#
+# TIER-Graph — SHACL structural constraints (first pass).
+#
+# These shapes encode the STRUCTURAL invariants of the core. They deliberately do NOT
+# encode procedural merge/identity semantics (which require code, not shapes) — see
+# spec/03-relation-identity.md. Where a rule cannot be expressed structurally, a comment
+# points to the procedural rule.
+#
+
+# --- DerivedRelation ---------------------------------------------------------
+tier:DerivedRelationShape a sh:NodeShape ;
+    sh:targetClass tier:DerivedRelation ;
+    rdfs:comment "Every DerivedRelation has exactly one source, one predicate, one target, and a polarity." ;
+    sh:property [
+        sh:path tier:sourceEntity ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:class tier:DerivedEntity ;
+        sh:message "A DerivedRelation MUST have exactly one source entity." ;
+    ] ;
+    sh:property [
+        sh:path tier:targetEntity ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:class tier:DerivedEntity ;
+        sh:message "A DerivedRelation MUST have exactly one target entity." ;
+    ] ;
+    sh:property [
+        sh:path tier:predicate ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "A DerivedRelation MUST have exactly one predicate." ;
+    ] ;
+    sh:property [
+        sh:path tier:polarity ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A DerivedRelation MUST specify polarity (a required qualifier dimension)." ;
+    ] .
+
+# --- RelationQualifier -------------------------------------------------------
+tier:RelationQualifierShape a sh:NodeShape ;
+    sh:targetClass tier:RelationQualifier ;
+    rdfs:comment "Qualifier status is one of specified/absent/unknown; a specified qualifier has a value." ;
+    sh:property [
+        sh:path tier:qualifierStatus ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:in ( "specified" "absent" "unknown" ) ;
+        sh:message "qualifierStatus MUST be specified, absent, or unknown." ;
+    ] ;
+    sh:property [
+        sh:path tier:qualifierDimension ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A qualifier MUST name its dimension." ;
+    ] ;
+    # A specified qualifier must carry a value. (unknown ≠ absent is a procedural merge
+    # rule; see spec/03-relation-identity.md — not expressible as a shape alone.)
+    sh:sparql [
+        sh:message "A qualifier with status 'specified' MUST have a value." ;
+        sh:select """
+            PREFIX tier: <https://spec.tier-graph.org/ontology#>
+            SELECT $this WHERE {
+                $this tier:qualifierStatus \"specified\" .
+                FILTER NOT EXISTS { $this tier:qualifierValue ?v }
+            }
+        """ ;
+    ] .
+
+# --- RelationEvidence --------------------------------------------------------
+tier:RelationEvidenceShape a sh:NodeShape ;
+    sh:targetClass tier:RelationEvidence ;
+    rdfs:comment "Every RelationEvidence has exactly one relation, at least one anchor, and a supports/refutes stance." ;
+    sh:property [
+        sh:path tier:evidenceOf ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:class tier:DerivedRelation ;
+        sh:message "A RelationEvidence MUST reference exactly one DerivedRelation." ;
+    ] ;
+    sh:property [
+        sh:path tier:hasAnchor ;
+        sh:minCount 1 ;
+        sh:class tier:EvidenceAnchor ;
+        sh:message "A RelationEvidence MUST have at least one EvidenceAnchor." ;
+    ] ;
+    sh:property [
+        sh:path tier:stance ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:in ( "supports" "refutes" ) ;
+        sh:message "stance MUST be 'supports' or 'refutes'." ;
+    ] .
+
+# --- EvidenceAnchor ----------------------------------------------------------
+tier:EvidenceAnchorShape a sh:NodeShape ;
+    sh:targetClass tier:EvidenceAnchor ;
+    sh:property [
+        sh:path tier:anchorsUnit ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:class tier:EvidenceUnitRef ;
+        sh:message "An EvidenceAnchor MUST reference exactly one evidence unit." ;
+    ] .
+
+# --- Review status -----------------------------------------------------------
+tier:ReviewStatusShape a sh:NodeShape ;
+    sh:targetObjectsOf tier:reviewStatus ;
+    sh:in ( "proposed" "accepted" "rejected" "superseded" ) ;
+    sh:message "reviewStatus MUST be proposed, accepted, rejected, or superseded." .
+
+#
+# NOTE (not expressible as shapes): source-state temporal intervals are NOT mandatory
+# TIER relation properties. The core MUST NOT copy an authoritative interval onto a
+# DerivedRelation; temporal state is computed from evidence admissibility. Enforced by
+# review and by the absence of any interval property on tier:DerivedRelation.
+#

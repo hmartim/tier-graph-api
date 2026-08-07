@@ -1,0 +1,33 @@
+post:
+  tags:
+    - "Optional Authoring"
+  summary: "Append a provenance activity to a subject."
+  operationId: "appendProvenanceActivity"
+  description: |
+    Adds a new `ProvenanceActivity` to a subject (entity, relation, or evidence) without
+    duplicating the evidential occurrence. Re-processing appends an activity; it does not
+    mint a new evidence record.
+  parameters:
+    - name: subjectId
+      in: path
+      required: true
+      description: "Opaque identifier of the subject (entity, relation, or evidence)."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../openapi.yaml#/components/schemas/ProvenanceActivity'
+  responses:
+    '201':
+      description: "The appended provenance activity."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/ProvenanceActivity'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

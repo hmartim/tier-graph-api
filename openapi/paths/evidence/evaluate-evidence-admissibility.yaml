@@ -1,0 +1,30 @@
+get:
+  tags:
+    - "Profiles"
+  summary: "Evaluate the admissibility of one entire evidence basis."
+  operationId: "evaluateEvidenceAdmissibility"
+  description: |
+    Evaluates one evidence basis. Because anchors within a `RelationEvidence` record are
+    conjunctive, the result is admissible only when EVERY anchor resolves to an admissible
+    source state. The response includes anchor-level detail (`anchorResults`).
+  parameters:
+    - name: evidenceId
+      in: path
+      required: true
+      description: "Identifier of the evidence record."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - $ref: '../../openapi.yaml#/components/parameters/ProfileId'
+    - $ref: '../../openapi.yaml#/components/parameters/At'
+    - $ref: '../../openapi.yaml#/components/parameters/ObserverTime'
+  responses:
+    '200':
+      description: "The evidence-basis admissibility decision, with anchor-level detail."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/AdmissibilityResult'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

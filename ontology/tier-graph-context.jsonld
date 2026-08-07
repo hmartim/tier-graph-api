@@ -1,0 +1,37 @@
+{
+  "@context": {
+    "tier": "https://spec.tier-graph.org/ontology#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "id": "@id",
+    "type": "@type",
+
+    "DerivedEntity": "tier:DerivedEntity",
+    "DerivedRelation": "tier:DerivedRelation",
+    "RelationQualifier": "tier:RelationQualifier",
+    "RelationEvidence": "tier:RelationEvidence",
+    "EvidenceAnchor": "tier:EvidenceAnchor",
+    "EvidenceUnitRef": "tier:EvidenceUnitRef",
+    "SourceStateRef": "tier:SourceStateRef",
+    "TemporalGroundingProfile": "tier:TemporalGroundingProfile",
+    "ProvenanceActivity": "tier:ProvenanceActivity",
+    "ReviewEvent": "tier:ReviewEvent",
+
+    "canonicalLabel": "tier:canonicalLabel",
+    "entityType": "tier:entityType",
+    "predicate": "tier:predicate",
+    "polarity": "tier:polarity",
+    "reviewStatus": "tier:reviewStatus",
+    "stance": "tier:stance",
+    "confidence": { "@id": "tier:confidence", "@type": "xsd:decimal" },
+
+    "sourceEntity": { "@id": "tier:sourceEntity", "@type": "@id" },
+    "targetEntity": { "@id": "tier:targetEntity", "@type": "@id" },
+    "hasQualifier": { "@id": "tier:hasQualifier", "@type": "@id" },
+    "evidenceOf": { "@id": "tier:evidenceOf", "@type": "@id" },
+    "hasAnchor": { "@id": "tier:hasAnchor", "@type": "@id" },
+    "anchorsUnit": { "@id": "tier:anchorsUnit", "@type": "@id" },
+    "ownedBy": { "@id": "tier:ownedBy", "@type": "@id" },
+    "groundedBy": { "@id": "tier:groundedBy", "@type": "@id" }
+  }
+}

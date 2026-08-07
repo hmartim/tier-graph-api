@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schemas/core/derived-relation.schema.json",
+  "id": "rel-persist-0001",
+  "sourceEntityId": "ent-state",
+  "predicate": "guarantees",
+  "targetEntityId": "ent-social-right",
+  "predicateFamily": "normativeConsequential",
+  "canonicalLabel": "The State guarantees the social right.",
+  "qualifiers": {
+    "polarity": {
+      "dimension": "polarity",
+      "status": "specified",
+      "value": "affirmative",
+      "identityRelevant": true
+    },
+    "condition": {
+      "dimension": "condition",
+      "status": "absent",
+      "identityRelevant": true,
+      "note": "No precondition attaches to this guarantee in this example."
+    },
+    "jurisdiction": {
+      "dimension": "jurisdiction",
+      "status": "specified",
+      "value": "example-jurisdiction",
+      "identityRelevant": true
+    }
+  },
+  "reviewStatus": "accepted",
+  "description": "Synthetic example: a persistent affirmative relation whose evidential state is expected to remain 'supported' across successive source states, because a supporting evidence basis is admissible throughout (see conformance case T01). This object carries NO temporal interval; persistence is a computed property of evidence admissibility, not a stored field."
+}

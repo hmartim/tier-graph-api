@@ -1,0 +1,25 @@
+{
+  "name": "tier-graph-api-scripts",
+  "version": "0.1.0-draft",
+  "private": true,
+  "type": "module",
+  "description": "Validation tooling for the TIER-Graph API specification (no service code)",
+  "scripts": {
+    "validate:schemas": "node validate_json_schemas.mjs",
+    "validate:examples": "node validate_examples.mjs",
+    "validate:openapi": "swagger-cli validate ../openapi/openapi.yaml",
+    "validate:rdf": "node validate_rdf.mjs",
+    "validate:conformance": "node validate_conformance.mjs",
+    "guard:private": "node reject_private_artifacts.mjs",
+    "validate:all": "npm run validate:schemas && npm run validate:examples && npm run validate:conformance && npm run guard:private"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@apidevtools/swagger-cli": "^4.0.4",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "glob": "^11.0.0",
+    "js-yaml": "^4.1.0",
+    "n3": "^1.17.0"
+  }
+}

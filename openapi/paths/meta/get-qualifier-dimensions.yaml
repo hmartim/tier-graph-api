@@ -1,0 +1,37 @@
+get:
+  tags:
+    - "Introspection"
+  summary: "Retrieve the qualifier dimensions declared by a profile."
+  operationId: "getQualifierDimensions"
+  description: |
+    Returns the qualifier dimensions an agent may reason about, and whether each is
+    identity-relevant (i.e. participates in the relation identity key and can block merging
+    when `unknown`). The minimum dimensions are polarity, condition, scope, modality, and
+    participantRoles; profiles MAY add more. Pass `profileId` to scope.
+  parameters:
+    - name: profileId
+      in: query
+      required: false
+      description: "Optional profile to scope the dimensions."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+  responses:
+    '200':
+      description: "The qualifier dimensions."
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              required: ["dimension", "identityRelevant"]
+              properties:
+                dimension:
+                  type: string
+                  description: "The qualifier dimension name."
+                identityRelevant:
+                  type: boolean
+                  description: "Whether this dimension participates in relation identity."
+                description:
+                  type: string
+              additionalProperties: false

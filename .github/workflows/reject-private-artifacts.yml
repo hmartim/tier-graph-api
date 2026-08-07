@@ -1,0 +1,26 @@
+name: Reject Private Artifacts
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  guard:
+    name: Ensure no private database, secret, or production data is tracked
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run private-artifact guard
+        working-directory: scripts
+        run: node reject_private_artifacts.mjs

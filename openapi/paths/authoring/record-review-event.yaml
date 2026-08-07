@@ -1,0 +1,32 @@
+post:
+  tags:
+    - "Optional Authoring"
+  summary: "Record an auditable review-state transition for a subject."
+  operationId: "recordReviewEvent"
+  description: |
+    Records a `ReviewEvent` capturing an auditable transition in review status for a subject
+    (entity, relation, or evidence).
+  parameters:
+    - name: subjectId
+      in: path
+      required: true
+      description: "Opaque identifier of the subject."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../openapi.yaml#/components/schemas/ReviewEvent'
+  responses:
+    '201':
+      description: "The recorded review event."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/ReviewEvent'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

@@ -1,0 +1,35 @@
+get:
+  tags:
+    - "Experimental Analytical Extensions"
+  summary: "Return causal gates compatible with a projection (experimental)."
+  operationId: "getActiveCausalGates"
+  description: |
+    EXPERIMENTAL. Returns gates whose supporting relations and source/target community
+    revisions are compatible with the requested projection. Incompatible gates MUST be
+    excluded (see spec/11).
+  parameters:
+    - $ref: '../../openapi.yaml#/components/parameters/ProfileId'
+    - $ref: '../../openapi.yaml#/components/parameters/At'
+    - name: policyId
+      in: query
+      required: true
+      description: "Admission policy."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - $ref: '../../openapi.yaml#/components/parameters/Cursor'
+  responses:
+    '200':
+      description: "A page of active causal gates."
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '../../openapi.yaml#/components/schemas/Page'
+              - type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '../../openapi.yaml#/components/schemas/CausalGate'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'

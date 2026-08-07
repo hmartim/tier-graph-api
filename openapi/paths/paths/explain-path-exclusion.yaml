@@ -1,0 +1,25 @@
+post:
+  tags:
+    - "Paths"
+  summary: "Explain why a relation path was excluded from a projection (CQ8)."
+  operationId: "explainPathExclusion"
+  description: |
+    Answers CQ8. Explains why a caller-supplied path is excluded from the projection at a
+    query time, naming the inadmissible evidence units and source states responsible.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../openapi.yaml#/components/schemas/ExplainPathExclusionRequest'
+  responses:
+    '200':
+      description: "One or more exclusion explanations."
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../openapi.yaml#/components/schemas/ExclusionExplanation'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'

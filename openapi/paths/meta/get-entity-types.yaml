@@ -1,0 +1,32 @@
+get:
+  tags:
+    - "Introspection"
+  summary: "Retrieve the entity-type vocabulary."
+  operationId: "getEntityTypes"
+  description: |
+    Returns the `entityType` values used to classify derived entities, so an agent can filter
+    or resolve within a known type space. The vocabulary is profile-defined; pass `profileId`
+    to scope it.
+  parameters:
+    - name: profileId
+      in: query
+      required: false
+      description: "Optional profile to scope the vocabulary."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+  responses:
+    '200':
+      description: "The entity-type vocabulary."
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              required: ["entityType"]
+              properties:
+                entityType:
+                  type: string
+                description:
+                  type: string
+              additionalProperties: false

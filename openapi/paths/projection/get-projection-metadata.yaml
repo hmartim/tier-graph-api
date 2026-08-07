@@ -1,0 +1,28 @@
+get:
+  tags:
+    - "Temporal Projection"
+  summary: "Return metadata needed to audit a graph projection."
+  operationId: "getProjectionMetadata"
+  description: |
+    Returns profile version, policy version, source revision/observer time, projection hash,
+    generation time, and admitted/excluded counts. The projection hash lets analytical
+    artifacts prove compatibility before reuse.
+  parameters:
+    - $ref: '../../openapi.yaml#/components/parameters/ProfileId'
+    - $ref: '../../openapi.yaml#/components/parameters/At'
+    - name: policyId
+      in: query
+      required: true
+      description: "Admission policy."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - $ref: '../../openapi.yaml#/components/parameters/ObserverTime'
+  responses:
+    '200':
+      description: "The projection metadata."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/ProjectionMetadata'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'

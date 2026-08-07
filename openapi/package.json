@@ -1,0 +1,21 @@
+{
+  "name": "tier-graph-api-openapi",
+  "version": "0.1.0-draft",
+  "private": true,
+  "description": "OpenAPI 3.1.0 contract tooling for the TIER-Graph API specification",
+  "scripts": {
+    "validate": "swagger-cli validate openapi.yaml",
+    "bundle": "swagger-cli bundle openapi.yaml --outfile openapi-bundled.yaml --type yaml",
+    "validate-bundled": "swagger-cli validate openapi-bundled.yaml"
+  },
+  "keywords": [
+    "openapi",
+    "tier-graph",
+    "specification"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@apidevtools/swagger-cli": "^4.0.4",
+    "js-yaml": "^4.1.0"
+  }
+}

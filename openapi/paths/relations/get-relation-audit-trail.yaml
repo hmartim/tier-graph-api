@@ -1,0 +1,38 @@
+get:
+  tags:
+    - "Audit"
+  summary: "Return a consolidated audit view of one relation."
+  operationId: "getRelationAuditTrail"
+  description: |
+    Returns relation identity, qualifiers, review status, evidence records, anchors,
+    source-state resolutions, admissibility results, provenance activities, and review
+    events. When `profileId` and `at` are supplied, the trail MAY include the evidential
+    state at that time.
+  parameters:
+    - name: relationId
+      in: path
+      required: true
+      description: "Opaque identifier of the relation."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - name: profileId
+      in: query
+      required: false
+      description: "Optional grounding profile for time-indexed audit."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - name: at
+      in: query
+      required: false
+      description: "Optional query time for time-indexed audit."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/TemporalCoordinate'
+  responses:
+    '200':
+      description: "The consolidated relation audit trail."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/RelationAuditTrail'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

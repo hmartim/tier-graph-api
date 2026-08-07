@@ -1,0 +1,37 @@
+get:
+  tags:
+    - "Relations"
+  summary: "List relations whose evidential state changes at or around a temporal boundary."
+  operationId: "getRelationsChangingAtBoundary"
+  description: |
+    Lists relations whose computed evidential state changes at (or around) a temporal
+    boundary. Useful for new applicability boundaries, amendments, corrections, withdrawals,
+    and prospective impact analysis.
+  parameters:
+    - $ref: '../../openapi.yaml#/components/parameters/ProfileId'
+    - $ref: '../../openapi.yaml#/components/parameters/At'
+    - name: direction
+      in: query
+      required: false
+      description: "Whether to consider state changes before, at, or after the boundary."
+      schema:
+        type: string
+        enum: ["before", "at", "after", "around"]
+    - $ref: '../../openapi.yaml#/components/parameters/PolicyId'
+    - $ref: '../../openapi.yaml#/components/parameters/Cursor'
+  responses:
+    '200':
+      description: "A page of relations changing state at the boundary, with their history entries."
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '../../openapi.yaml#/components/schemas/Page'
+              - type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '../../openapi.yaml#/components/schemas/RelationHistoryEntry'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'

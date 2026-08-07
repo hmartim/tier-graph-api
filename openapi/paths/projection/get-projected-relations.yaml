@@ -1,0 +1,42 @@
+get:
+  tags:
+    - "Temporal Projection"
+  summary: "Return the edge set admitted into the time-indexed graph projection."
+  operationId: "getProjectedRelations"
+  description: |
+    Returns the `ProjectedRelation` set admitted into the projection for
+    ⟨profileId, at, policyId⟩. Each item carries the relation, its evidential state, and the
+    `admitted` flag.
+  parameters:
+    - $ref: '../../openapi.yaml#/components/parameters/ProfileId'
+    - $ref: '../../openapi.yaml#/components/parameters/At'
+    - name: policyId
+      in: query
+      required: true
+      description: "Admission policy defining which evidential states are admitted."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - $ref: '../../openapi.yaml#/components/parameters/ObserverTime'
+    - name: predicateFamily
+      in: query
+      required: false
+      description: "Optional predicate-family filter."
+      schema:
+        type: string
+    - $ref: '../../openapi.yaml#/components/parameters/Cursor'
+  responses:
+    '200':
+      description: "A page of projected relations."
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '../../openapi.yaml#/components/schemas/Page'
+              - type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '../../openapi.yaml#/components/schemas/ProjectedRelation'
+    '400':
+      $ref: '../../openapi.yaml#/components/responses/BadRequest'

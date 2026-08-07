@@ -1,0 +1,24 @@
+get:
+  tags:
+    - "Entities"
+  summary: "Retrieve one DerivedEntity by its opaque identifier."
+  operationId: "getEntity"
+  description: |
+    Retrieves one `DerivedEntity`. Identity is bound to the opaque `entityId`; labels never
+    define identity.
+  parameters:
+    - name: entityId
+      in: path
+      required: true
+      description: "Opaque identifier of the entity."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
+  responses:
+    '200':
+      description: "The derived entity."
+      content:
+        application/json:
+          schema:
+            $ref: '../../openapi.yaml#/components/schemas/DerivedEntity'
+    '404':
+      $ref: '../../openapi.yaml#/components/responses/NotFound'

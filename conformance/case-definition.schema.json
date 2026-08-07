@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.tier-graph.org/conformance/case-definition.schema.json",
+  "title": "ConformanceCaseDefinition",
+  "description": "The NORMATIVE definition of one conformance case in tier-graph-api. It describes WHAT is tested and the expected behavior; it does NOT contain executable payloads. The concrete input/profile-fixture/request/expected payloads live in a separate implementation repository, referenced by `executableFixture`.",
+  "type": "object",
+  "required": ["id", "title", "operation", "competencyQuestions", "conformanceClasses", "ontologicalProperty", "requiredInvariants", "expectedBehavior", "executableFixture"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Case identifier (T01–T10).",
+      "pattern": "^T[0-9]{2}$"
+    },
+    "slug": {
+      "type": "string",
+      "description": "Kebab-case slug for the case.",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "title": {
+      "type": "string",
+      "description": "Human-readable case title.",
+      "minLength": 1
+    },
+    "operation": {
+      "type": "string",
+      "description": "The primary API operationId under test.",
+      "minLength": 1
+    },
+    "competencyQuestions": {
+      "type": "array",
+      "description": "The competency questions this case exercises.",
+      "minItems": 1,
+      "items": { "type": "string", "pattern": "^CQ[1-8]$" },
+      "uniqueItems": true
+    },
+    "conformanceClasses": {
+      "type": "array",
+      "description": "The conformance class(es) this case exercises.",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": ["core-model", "temporal-grounding", "query-api", "path", "authoring", "analytical-extension"]
+      },
+      "uniqueItems": true
+    },
+    "ontologicalProperty": {
+      "type": "string",
+      "description": "The ontological property / invariant the case tests (one sentence).",
+      "minLength": 1
+    },
+    "requiredInvariants": {
+      "type": "array",
+      "description": "The invariants an implementation MUST satisfy to pass this case.",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "expectedBehavior": {
+      "type": "string",
+      "description": "The normative expected behavior, in prose.",
+      "minLength": 1
+    },
+    "fixtureContract": {
+      "type": "object",
+      "description": "The contract that an executable fixture for this case must follow: which files it provides and (optionally) the schema each conforms to.",
+      "properties": {
+        "input": { "type": "string", "description": "Schema/ref an input.json must follow, or a description of it." },
+        "profileFixture": { "type": "string", "description": "Schema/ref a profile-fixture.json must follow, or a description of it." },
+        "request": { "type": "string", "description": "The request shape (operation parameters or request-body schema)." },
+        "expected": { "type": "string", "description": "The expected-result shape (response schema for the operation)." }
+      },
+      "additionalProperties": false
+    },
+    "executableFixture": {
+      "type": "object",
+      "description": "Pointer to the executable fixture in the implementation repository. This specification repository does NOT contain the payloads.",
+      "required": ["repository", "path"],
+      "properties": {
+        "repository": { "type": "string", "description": "Name of the implementation repository (e.g. 'tier-graph-reference')." },
+        "path": { "type": "string", "description": "Path within that repository to the fixture case directory." }
+      },
+      "additionalProperties": false
+    },
+    "definition": {
+      "type": "string",
+      "description": "Relative path to the case's normative prose document (cases/T0N.md)."
+    }
+  },
+  "additionalProperties": false
+}
