@@ -12,10 +12,16 @@ The minimum identity key of a relation `r` is:
 Key(r) = ⟨sourceEntityId, predicate, targetEntityId, polarity, truth-conditional qualifiers⟩
 ```
 
-where *truth-conditional qualifiers* are the identity-relevant dimensions declared by the
-profile (see [02 — RelationQualifier](./02-core-ontology.md#22-relationqualifier)). Polarity
-is itself a qualifier dimension; it is called out in the key because a well-formed relation
-**MUST** always specify it.
+where *truth-conditional qualifiers* are the identity-relevant dimensions declared in
+`ProfileVocabulary.qualifierDimensions` (see
+[02 — RelationQualifier](./02-core-ontology.md#22-relationqualifier)). Polarity is itself a
+qualifier dimension; it is called out in the key because a well-formed relation **MUST**
+always specify it.
+
+Identity relevance is a property of the *dimension*, not of an occurrence:
+`identityRelevant(q) = identityRelevant_V(dimension(q))`. A `RelationQualifier` instance
+therefore **MUST NOT** carry the flag; the vocabulary is the sole authority, and automatic
+identity comparison is scoped to a fixed vocabulary version and qualifier-schema version.
 
 ## 3.2 When automatic merging is permitted
 

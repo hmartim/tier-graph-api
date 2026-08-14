@@ -50,8 +50,11 @@ identity. The minimum dimensions the base specification recognizes are:
 - `modality` (when modality is not encoded by the predicate);
 - `participantRoles`.
 
-A domain profile **MAY** add dimensions (jurisdiction, threshold, exception, population,
-temporal relation among represented events, dosage, territorial scope, authority level, …).
+A `ProfileVocabulary` **MAY** declare additional dimensions (jurisdiction, threshold,
+exception, population, temporal relation among represented events, dosage, territorial
+scope, authority level, …), and declares for each whether it is identity-relevant. A
+`RelationQualifier` instance carries the dimension, never that flag
+([03 — Relation identity](./03-relation-identity.md)).
 
 **Qualifier status.** Every declared identity-relevant dimension **MUST** carry a status:
 
@@ -80,11 +83,32 @@ transfer representation polarity is carried as a qualifier, but it is a distingu
 component of the identity key ([03 — Relation identity](./03-relation-identity.md)), not
 one truth-conditional dimension among others.
 
-**Predicate families.** The base specification **SHOULD** recognize at least:
-`classificatory`, `definitional`, `normativeDependency` (deontic dependency),
-`institutional`, `procedural`,
-`factualCausal`, `attributional`, `normativeConsequential`. The vocabulary of *specific*
-predicates is profile-defined.
+**Predicate families.** `predicateFamily` is an optional coarse classification of the
+predicate, used to filter relations and to bound path traversal. The core **fixes no
+universal taxonomy of predicate families**: a closed list would encode one domain's carving
+of relation types into a domain-independent contract, and every domain that did not fit —
+biomedical (`biologicalInteraction`, `diagnostic`), spatial, mereological — would have to
+misfile its relations. Instead:
+
+- A deployment **MAY** define a controlled vocabulary of predicate families, declared in
+  `ProfileVocabulary.predicateFamilies` ([11 — Extension points](./11-extension-points.md)).
+- A vocabulary whose relations carry `predicateFamily` **MUST** declare every value emitted
+  and **MUST** define the semantics of each, precisely enough that an auditor can decide
+  whether a given predicate belongs to a family.
+- An implementation **MUST NOT** emit a family its vocabulary has not declared, and **MUST**
+  expose the declared families through `getPredicateFamilies`.
+
+Determinism is therefore preserved where it is checkable — the list is fixed within a
+vocabulary version — without asserting a universal taxonomy. Any family token appearing in
+this specification, in the schemas, or in the templates is an **example in documentation**;
+the core recognizes none of them and privileges none of them. The vocabulary of *specific*
+predicates, entity types, and qualifier dimensions is declared the same way.
+
+> Cross-vocabulary portability of family filters is deliberately **not** guaranteed: a
+> client that hard-codes family tokens is bound to a vocabulary version. What the core makes
+> interoperable is the *mechanism*, not the values — the same answer it gives for
+> `entityType`. A future revision **MAY** add an optional mapping from vocabulary-specific
+> families to a small interoperability set; this version does not specify one.
 
 **No copied intervals.** A `DerivedRelation` **MUST NOT** carry an authoritative
 source-state interval. Its temporal behavior is *computed* (see

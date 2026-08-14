@@ -4,7 +4,7 @@
   "title": "RelationHistoryEntry",
   "description": "A time boundary or period at which a relation's computed evidential state differs. The history is COMPUTED from evidence and source-state admissibility; the API MUST NOT require a copied relation-level temporal interval. `boundaryCauseRefs` MAY reference the authoritative transition (in the substrate) that caused the boundary, when the profile exposes such transitions.",
   "type": "object",
-  "required": ["relationId", "profileId", "state"],
+  "required": ["relationId", "profileId", "profileVersion", "policyId", "policyVersion", "state"],
   "properties": {
     "relationId": {
       "$ref": "../common/identifier.schema.json",
@@ -13,6 +13,20 @@
     "profileId": {
       "$ref": "../common/identifier.schema.json",
       "description": "The grounding profile under which the history was computed."
+    },
+    "profileVersion": {
+      "type": "string",
+      "description": "Exact version of that grounding profile.",
+      "minLength": 1
+    },
+    "policyId": {
+      "$ref": "../common/identifier.schema.json",
+      "description": "The admission policy under which the states in this history were computed. Two policies can yield different histories for the same relation and the same grounding profile, so a history serialized without its policy is ambiguous. When the caller does not name one, the resolved default MUST be reported here."
+    },
+    "policyVersion": {
+      "type": "string",
+      "description": "Exact version of that admission policy.",
+      "minLength": 1
     },
     "state": {
       "$ref": "../common/evidential-state.schema.json",

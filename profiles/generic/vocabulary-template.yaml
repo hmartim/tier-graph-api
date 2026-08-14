@@ -1,0 +1,61 @@
+# =============================================================================
+# ProfileVocabulary — template
+#
+# Copy this file to profiles/<your-profile>/vocabulary.yaml and fill it in. It declares the
+# semantic vocabulary used to build and compare relations: entity types, predicates,
+# predicate families, and qualifier dimensions.
+#
+# This document is ORTHOGONAL to the grounding profile. It fixes MEANING and IDENTITY; the
+# TemporalGroundingProfile fixes TEMPORAL AUTHORITY. Identity comparison is scoped to a
+# vocabulary version; evidential state is scoped to a grounding-profile version.
+#
+# The core declares no universal taxonomy for any of these lists. The values below are
+# illustrative only — carve your own domain. Nothing here is privileged by the core.
+#
+# Validates against: schemas/vocabulary/profile-vocabulary.schema.json
+# =============================================================================
+
+id: "example-generic-vocabulary"
+name: "Example Generic Vocabulary"
+version: "0.1.0"
+
+description: >-
+  Replace with a description of the domain this vocabulary carves and the criteria used to
+  admit a term into it.
+
+entityTypes:
+  - entityType: "abstractSubject"
+    semantics: "A subject to which properties or commitments may be attributed."
+  - entityType: "abstractObject"
+    semantics: "A thing, state, or condition a relation may point at."
+
+predicateFamilies:
+  - family: "classificatory"
+    semantics: >-
+      The predicate places the source under a class, type, or category denoted by the target.
+  - family: "attributional"
+    semantics: >-
+      The predicate attributes a property, capacity, or commitment to the source.
+
+predicates:
+  - predicate: "isA"
+    semantics: "The source falls under the class denoted by the target."
+    family: "classificatory"
+  - predicate: "guarantees"
+    semantics: "The source undertakes to secure the condition denoted by the target."
+    family: "attributional"
+
+qualifierDimensions:
+  - dimension: "polarity"
+    semantics: "Whether the proposition is asserted affirmatively or negatively."
+    identityRelevant: true
+  - dimension: "condition"
+    semantics: "The precondition under which the proposition holds, if any."
+    identityRelevant: true
+  - dimension: "jurisdiction"
+    semantics: "The authority space within which the proposition is asserted."
+    identityRelevant: true
+
+metadata:
+  notes: >-
+    This is a template with obviously non-production values. Do not ship it as-is.

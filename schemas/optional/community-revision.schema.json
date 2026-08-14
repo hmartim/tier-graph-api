@@ -4,12 +4,14 @@
   "title": "CommunityRevision",
   "description": "OPTIONAL EXTENSION — not part of the three-object ontological core. A non-authoritative, revision-indexed analytical artifact derived from a compatible TIER-Graph projection (e.g. a graph community detected over a time-indexed edge set). A community revision MUST NOT be reused for a temporal projection unless compatibility is proven (see `derivedFromProjectionHash`).",
   "type": "object",
-  "required": ["id", "profileId", "queryTime", "policyId", "memberEntityIds", "memberRelationIds", "algorithm"],
+  "required": ["id", "profileId", "profileVersion", "queryTime", "policyId", "policyVersion", "memberEntityIds", "memberRelationIds", "algorithm"],
   "properties": {
     "id": { "$ref": "../common/identifier.schema.json", "description": "Opaque identifier." },
     "profileId": { "$ref": "../common/identifier.schema.json", "description": "The grounding profile of the projection this was derived from." },
+    "profileVersion": { "type": "string", "description": "Exact version of that grounding profile. An artifact that must prove projection compatibility before reuse cannot identify its provenance by a rebindable id.", "minLength": 1 },
     "queryTime": { "$ref": "../common/temporal-coordinate.schema.json", "description": "The projection's query time." },
     "policyId": { "$ref": "../common/identifier.schema.json", "description": "The projection's admission policy." },
+    "policyVersion": { "type": "string", "description": "Exact version of that admission policy.", "minLength": 1 },
     "memberEntityIds": {
       "type": "array",
       "description": "Entities that are members of the community.",

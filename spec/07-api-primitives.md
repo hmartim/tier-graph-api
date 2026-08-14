@@ -34,7 +34,10 @@ operations, so a conforming agent must be able to discover policies rather than 
 
 Reasoning-vocabulary introspection:
 `getPredicates`, `getPredicateFamilies`, `getQualifierDimensions`, `getEntityTypes` — the
-profile-defined vocabulary an agent needs to *form* queries.
+declared vocabulary an agent needs to *form* queries. Each response is an envelope
+`⟨vocabularyRef, items⟩` and **MUST** name the exact `ProfileVocabulary` version the values
+were read from: `profileId` alone does not identify one, since a deployment may rebind it,
+and a logged answer that cannot be attributed to a vocabulary version cannot be replayed.
 
 Entities:
 `getEntity`, `getBatchEntities`, `queryEntities`, `getRelationsByEntity` (CQ1 — canonical

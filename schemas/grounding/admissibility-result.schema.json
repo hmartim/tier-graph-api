@@ -4,7 +4,7 @@
   "title": "AdmissibilityResult",
   "description": "Reports whether a source state (or an entire evidence basis) is admissible at a temporal coordinate under a profile, and explains the decision. The result comes FROM the profile; the TIER-Graph core MUST NOT fabricate or infer a competing decision. For conjunctive evidence, the basis is admissible only when every anchor resolves to an admissible source state (see `anchorResults`).",
   "type": "object",
-  "required": ["admissible", "profileId", "queryTime"],
+  "required": ["admissible", "profileId", "profileVersion", "queryTime"],
   "properties": {
     "admissible": {
       "type": "boolean",
@@ -13,6 +13,11 @@
     "profileId": {
       "$ref": "../common/identifier.schema.json",
       "description": "The profile that produced this result."
+    },
+    "profileVersion": {
+      "type": "string",
+      "description": "Exact version of that profile. Among computed results, this one depends on a single versioned authority — the TemporalGroundingProfile — and names no admission policy: admissible_ρ(s, t) never depends on π, which decides which evidential states enter a projection, downstream of this decision. The consuming object (RelationStateExplanation, GroundedPath, ProjectionMetadata, ...) records the policy context of the execution that used this result.",
+      "minLength": 1
     },
     "queryTime": {
       "$ref": "../common/temporal-coordinate.schema.json",
@@ -34,10 +39,6 @@
     "reason": {
       "type": "string",
       "description": "Human-readable explanation."
-    },
-    "policyId": {
-      "$ref": "../common/identifier.schema.json",
-      "description": "Optional admission policy in force, when relevant to the decision."
     },
     "anchorResults": {
       "type": "array",

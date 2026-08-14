@@ -4,7 +4,7 @@
   "title": "ExclusionExplanation",
   "description": "Explains why a relation, evidence basis, path, community revision, or causal gate was excluded from a time-indexed projection. Provides the machine-readable audit answer to 'why is this not here at time t?', naming the inadmissible evidence units and/or source states responsible.",
   "type": "object",
-  "required": ["subjectType", "subjectId", "profileId", "queryTime", "reasonCode", "reason"],
+  "required": ["subjectType", "subjectId", "profileId", "profileVersion", "queryTime", "policyId", "policyVersion", "reasonCode", "reason"],
   "properties": {
     "subjectType": {
       "type": "string",
@@ -18,6 +18,11 @@
     "profileId": {
       "$ref": "../common/identifier.schema.json",
       "description": "The grounding profile under which exclusion was determined."
+    },
+    "profileVersion": {
+      "type": "string",
+      "description": "Exact version of that grounding profile.",
+      "minLength": 1
     },
     "queryTime": {
       "$ref": "../common/temporal-coordinate.schema.json",
@@ -50,7 +55,12 @@
     },
     "policyId": {
       "$ref": "../common/identifier.schema.json",
-      "description": "The admission policy in force."
+      "description": "The admission policy in force for the projection this exclusion was determined against. Recording it does not claim the policy caused the exclusion — a purely temporal exclusion is still a decision taken inside a projection ⟨ρ, π, t⟩, and the explanation identifies that context."
+    },
+    "policyVersion": {
+      "type": "string",
+      "description": "Exact version of that admission policy.",
+      "minLength": 1
     },
     "details": {
       "type": "object",

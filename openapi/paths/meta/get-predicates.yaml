@@ -5,8 +5,10 @@ get:
   operationId: "getPredicates"
   description: |
     Returns the predicate vocabulary an agent may use to form relation queries. The specific
-    vocabulary is profile-defined; pass `profileId` to scope it. Each entry names the
-    predicate and its coarse `predicateFamily`.
+    vocabulary is declared in the `ProfileVocabulary` bound to the profile; pass `profileId`
+    to scope it. Each entry names the predicate and its coarse `predicateFamily`. The
+    response names the exact vocabulary version it came from, so a logged answer stays
+    readable after the binding moves.
   parameters:
     - name: profileId
       in: query
@@ -20,17 +22,25 @@ get:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              type: object
-              required: ["predicate"]
-              properties:
-                predicate:
-                  type: string
-                  description: "The predicate token."
-                predicateFamily:
-                  type: string
-                  description: "The coarse family this predicate belongs to."
-                description:
-                  type: string
-              additionalProperties: false
+            type: object
+            required: ["vocabularyRef", "items"]
+            properties:
+              vocabularyRef:
+                $ref: '../../openapi.yaml#/components/schemas/VocabularyRef'
+                description: "The vocabulary version these values were read from."
+              items:
+                type: array
+                items:
+                  type: object
+                  required: ["predicate"]
+                  properties:
+                    predicate:
+                      type: string
+                      description: "The predicate token."
+                    predicateFamily:
+                      type: string
+                      description: "The coarse family this predicate belongs to."
+                    description:
+                      type: string
+                  additionalProperties: false
+            additionalProperties: false

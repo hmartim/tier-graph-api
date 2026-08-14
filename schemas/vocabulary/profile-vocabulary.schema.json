@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.tier-graph.org/schemas/vocabulary/profile-vocabulary.schema.json",
+  "title": "ProfileVocabulary",
+  "description": "The semantic vocabulary an implementation uses to build and compare DerivedEntity and DerivedRelation objects: entity types, predicates, predicate families, and qualifier dimensions. This is ORTHOGONAL to temporal authority: a TemporalGroundingProfile answers evidenceUnit -> sourceState -> admissible(t) and says nothing about what a predicate means, while a ProfileVocabulary fixes meaning and identity and says nothing about time. The effective profile of an implementation is the pair ⟨vocabulary, groundingProfile⟩; the same vocabulary MAY be grounded on different substrates, and the same grounding profile MAY serve different vocabularies. The core declares NO universal taxonomy for any of these lists: it requires only that the values an implementation emits be declared here, with their semantics, and be discoverable through the introspection operations. Identity comparison is scoped to a vocabulary version; temporal state is scoped to a grounding-profile version.",
+  "type": "object",
+  "required": ["id", "version"],
+  "properties": {
+    "id": {
+      "$ref": "../common/identifier.schema.json",
+      "description": "Opaque, unique identifier for this vocabulary."
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable vocabulary name.",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "description": "Explicit vocabulary version (semantic versioning recommended). Automatic identity comparison is scoped to a fixed vocabulary version.",
+      "minLength": 1
+    },
+    "entityTypes": {
+      "type": "array",
+      "description": "Entity types admitted in `DerivedEntity.entityType`.",
+      "items": {
+        "type": "object",
+        "required": ["entityType", "semantics"],
+        "properties": {
+          "entityType": { "type": "string", "description": "The type token.", "minLength": 1 },
+          "semantics": { "type": "string", "description": "What this type classifies.", "minLength": 1 },
+          "label": { "type": "string", "description": "Optional display name. Never an identity.", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "predicates": {
+      "type": "array",
+      "description": "Predicates admitted in `DerivedRelation.predicate`.",
+      "items": {
+        "type": "object",
+        "required": ["predicate", "semantics"],
+        "properties": {
+          "predicate": { "type": "string", "description": "The predicate token.", "minLength": 1 },
+          "semantics": { "type": "string", "description": "What this predicate asserts of source and target.", "minLength": 1 },
+          "family": { "type": "string", "description": "Optional family this predicate belongs to; MUST be declared in `predicateFamilies`.", "minLength": 1 },
+          "label": { "type": "string", "description": "Optional display name. Never an identity.", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "predicateFamilies": {
+      "type": "array",
+      "description": "Coarse predicate families admitted in `DerivedRelation.predicateFamily`. An implementation MUST NOT emit a family absent from this list.",
+      "items": {
+        "type": "object",
+        "required": ["family", "semantics"],
+        "properties": {
+          "family": { "type": "string", "description": "The family token.", "minLength": 1 },
+          "semantics": { "type": "string", "description": "What this family classifies, precisely enough that an auditor can decide whether a given predicate belongs to it.", "minLength": 1 },
+          "label": { "type": "string", "description": "Optional display name. Never an identity.", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "qualifierDimensions": {
+      "type": "array",
+      "description": "Qualifier dimensions admitted in `DerivedRelation.qualifiers`, and which of them are identity-relevant.",
+      "items": {
+        "type": "object",
+        "required": ["dimension", "semantics", "identityRelevant"],
+        "properties": {
+          "dimension": { "type": "string", "description": "The dimension name, matching the key in `DerivedRelation.qualifiers`.", "minLength": 1 },
+          "semantics": { "type": "string", "description": "What this dimension qualifies and what its values range over.", "minLength": 1 },
+          "identityRelevant": { "type": "boolean", "description": "Whether this dimension participates in the relation identity key. Changing it changes identity, so it is a vocabulary-version change." },
+          "label": { "type": "string", "description": "Optional display name. Never an identity.", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional prose description of the vocabulary and the domain it carves."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Vocabulary-specific properties.",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

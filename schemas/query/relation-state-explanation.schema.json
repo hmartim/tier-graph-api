@@ -4,13 +4,15 @@
   "title": "RelationStateExplanation",
   "description": "A machine-readable explanation of WHY a relation is supported/refuted/contested/unsupported and admitted/excluded at a query time. The response is structured data; natural-language rendering is a client concern.",
   "type": "object",
-  "required": ["relationId", "profileId", "queryTime", "state", "admitted"],
+  "required": ["relationId", "profileId", "profileVersion", "queryTime", "policyId", "policyVersion", "state", "admitted"],
   "properties": {
     "relationId": { "$ref": "../common/identifier.schema.json", "description": "The relation being explained." },
     "profileId": { "$ref": "../common/identifier.schema.json", "description": "Grounding profile." },
+    "profileVersion": { "type": "string", "description": "Exact version of that grounding profile. Ids are rebindable; an explanation attributed only to an id cannot be replayed.", "minLength": 1 },
     "queryTime": { "$ref": "../common/temporal-coordinate.schema.json", "description": "Query time." },
     "observerTime": { "$ref": "../common/temporal-coordinate.schema.json", "description": "Optional observer time." },
-    "policyId": { "$ref": "../common/identifier.schema.json", "description": "Admission policy in force." },
+    "policyId": { "$ref": "../common/identifier.schema.json", "description": "The admission policy resolved for this explanation, including when it was the deployment default rather than caller-supplied." },
+    "policyVersion": { "type": "string", "description": "Exact version of that admission policy.", "minLength": 1 },
     "state": { "$ref": "../common/evidential-state.schema.json", "description": "The computed evidential state." },
     "admitted": { "type": "boolean", "description": "Whether the relation is admitted into the projection under the policy." },
     "admissibleSupporting": {

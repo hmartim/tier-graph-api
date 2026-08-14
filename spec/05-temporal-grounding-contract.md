@@ -56,7 +56,11 @@ A profile **MUST** declare, in its `TemporalGroundingProfile` object:
   time *t*" means for this profile. This is the authoritative definition the core defers to.
 
 A profile **MAY** additionally declare `supportedSelectors`, `supportedTemporalCoordinates`,
-a `defaultAdmissionPolicyId`, `documentationUri`, and `metadata`.
+a `defaultAdmissionPolicyId`, `documentationUri`, `metadata`, and a `vocabularyRef` naming
+the `ProfileVocabulary` version it is deployed with
+([11 — Extension points](./11-extension-points.md)). It declares **no** semantic vocabulary
+itself: entity types, predicates, predicate families, and qualifier dimensions belong to the
+vocabulary, not to the grounding profile.
 
 The declared type labels are **opaque to the core**. TIER-Graph never interprets them; they
 exist so that callers and auditors can understand the substrate a profile grounds.

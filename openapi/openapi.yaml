@@ -73,6 +73,8 @@ components:
       $ref: '../schemas/common/external-identifier.schema.json'
     AgentRef:
       $ref: '../schemas/common/agent-ref.schema.json'
+    VocabularyRef:
+      $ref: '../schemas/common/vocabulary-ref.schema.json'
 
     # --- core -----------------------------------------------------------------
     DerivedEntity:

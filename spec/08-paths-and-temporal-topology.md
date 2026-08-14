@@ -70,6 +70,14 @@ positively supported chain evaluates it from the steps.
 - `explainPathExclusion` (CQ8) — return `ExclusionExplanation` objects naming the
   inadmissible evidence units / source states responsible for excluding a path.
 
+**Reproducible attribution.** A `GroundedPath` **MUST** record `profileVersion` and
+`policyVersion`, not only the ids: a deployment may rebind an id, and a result attributed to
+a rebindable id cannot be replayed. This also settles the vocabulary question for
+`predicateFamilies`: a family-filtered search depends on the vocabulary as well, and
+⟨`profileId`, `profileVersion`⟩ resolves to that profile version's `vocabularyRef`, hence to
+an exact `ProfileVocabulary` version. The path therefore carries no `vocabularyRef` of its
+own — the chain ⟨profileId, profileVersion⟩ → vocabularyRef is enough.
+
 ## 8.5 Conformance (Path)
 
 Path Conformance requires: paths generated over a time-indexed projection; step-level

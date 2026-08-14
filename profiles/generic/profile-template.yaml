@@ -44,6 +44,16 @@ supportedTemporalCoordinates:
   - "queryTime"
   - "observerTime"
 
+# The semantic vocabulary this deployment binds to (see vocabulary-template.yaml). Meaning
+# and time are separate concerns: this profile decides WHEN evidence is admissible, the
+# vocabulary decides WHAT a predicate, family, type or dimension means. The same vocabulary
+# may be grounded on another substrate, and this profile may serve another vocabulary.
+# The binding is version-specific on purpose: with the id alone, a later vocabulary version
+# would silently change what identity means for relations already grounded by this profile.
+vocabularyRef:
+  id: "example-generic-vocabulary"
+  version: "0.1.0"
+
 # Optional default admission policy applied when the caller does not specify one.
 defaultAdmissionPolicyId: "strict-supported"
 

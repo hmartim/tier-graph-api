@@ -10,8 +10,10 @@
     "targetEntityId",
     "steps",
     "profileId",
+    "profileVersion",
     "queryTime",
     "policyId",
+    "policyVersion",
     "admissible"
   ],
   "properties": {
@@ -39,6 +41,11 @@
       "$ref": "../common/identifier.schema.json",
       "description": "The grounding profile used."
     },
+    "profileVersion": {
+      "type": "string",
+      "description": "Exact version of the grounding profile used. REQUIRED, because an id alone does not identify one: a deployment may rebind it. This is also what makes a vocabulary-filtered search reproducible — when `predicateFamilies` is used, the result depends on the vocabulary as well, and ⟨profileId, profileVersion⟩ resolves to that profile document's `vocabularyRef`, hence to an exact ProfileVocabulary version. No separate vocabularyRef is carried here; the chain is ⟨profileId, profileVersion⟩ → vocabularyRef.",
+      "minLength": 1
+    },
     "queryTime": {
       "$ref": "../common/temporal-coordinate.schema.json",
       "description": "The query time the projection was built for."
@@ -46,6 +53,11 @@
     "policyId": {
       "$ref": "../common/identifier.schema.json",
       "description": "The admission policy used."
+    },
+    "policyVersion": {
+      "type": "string",
+      "description": "Exact version of the admission policy used. REQUIRED for the same reason as `profileVersion`: which evidential states were admitted is not reproducible from a policy id that may have been rebound.",
+      "minLength": 1
     },
     "admissible": {
       "type": "boolean",

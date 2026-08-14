@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.tier-graph.org/schemas/common/vocabulary-ref.schema.json",
+  "title": "VocabularyRef",
+  "description": "A version-specific reference to a ProfileVocabulary. The version is REQUIRED, not decorative: identity is interpreted under a vocabulary version, so an id alone would leave both the binding of a deployment and the reading of a past answer irreproducible once the vocabulary moves.",
+  "type": "object",
+  "required": ["id", "version"],
+  "properties": {
+    "id": {
+      "$ref": "./identifier.schema.json",
+      "description": "Identifier of the ProfileVocabulary."
+    },
+    "version": {
+      "type": "string",
+      "description": "Exact vocabulary version, matching `ProfileVocabulary.version`.",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false
+}

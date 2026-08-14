@@ -146,7 +146,7 @@ tier-graph-api/
 ├── openapi/         Machine-readable API contract (OpenAPI 3.1.0, modular + bundler)
 ├── schemas/         Machine-readable data models (JSON Schema 2020-12)
 ├── ontology/        Lightweight RDF/OWL vocabulary (Turtle) + SHACL constraints
-├── profiles/        Generic grounding-profile template + authoring guide
+├── profiles/        Generic vocabulary + grounding-profile templates, authoring guide
 ├── examples/        Synthetic example instances (validate against schemas)
 ├── conformance/     Normative conformance definitions T01–T10 (no executable payloads)
 └── scripts/         Validation tooling (no service implementation)
@@ -200,12 +200,18 @@ TIER-Graph is domain-independent. To implement it:
 1. Model your referents as `DerivedEntity` and your propositions as `DerivedRelation`.
 2. Attach `RelationEvidence` records, each anchoring one or more externally controlled
    evidence units (`EvidenceUnitRef`).
-3. Provide a **`TemporalGroundingProfile`** that implements `owner(evidenceUnit)` and
+3. Declare a **`ProfileVocabulary`**: the entity types, predicates, predicate families, and
+   qualifier dimensions of *your* domain, and which dimensions are identity-relevant. The
+   core fixes none of these.
+4. Provide a **`TemporalGroundingProfile`** that implements `owner(evidenceUnit)` and
    `admissible(sourceState, t)` over *your* source substrate.
-4. Expose the required query and grounding primitives from the OpenAPI contract.
+5. Expose the required query and grounding primitives from the OpenAPI contract.
 
-Start from [`profiles/generic/profile-template.yaml`](./profiles/generic/profile-template.yaml)
-and read [`spec/05-temporal-grounding-contract.md`](./spec/05-temporal-grounding-contract.md).
+Steps 3 and 4 are separate documents on purpose: the vocabulary fixes meaning and identity,
+the grounding profile fixes temporal authority, and each is versioned on its own. Start from
+[`profiles/generic/vocabulary-template.yaml`](./profiles/generic/vocabulary-template.yaml)
+and [`profiles/generic/profile-template.yaml`](./profiles/generic/profile-template.yaml),
+then read [`spec/05-temporal-grounding-contract.md`](./spec/05-temporal-grounding-contract.md).
 
 ## Validation
 

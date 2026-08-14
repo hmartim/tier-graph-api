@@ -8,8 +8,10 @@
 #
 # TIER-Graph — lightweight ontology (first pass).
 #
-# This vocabulary mirrors the core JSON Schema data models. It is intentionally
-# lightweight: it declares classes and properties, but it does NOT attempt to encode
+# This vocabulary mirrors the classes of the core JSON Schema data models and the
+# grounding/vocabulary documents they defer to. It is intentionally lightweight: it declares
+# classes and properties, but it does NOT enumerate the contents of a ProfileVocabulary
+# (those are deployment-declared, not core terms), and it does NOT attempt to encode
 # procedural merge/identity semantics in OWL (those require procedural validation — see
 # spec/03-relation-identity.md). Structural constraints are in tier-graph.shacl.ttl.
 #
@@ -53,7 +55,11 @@ tier:SourceStateRef a owl:Class ;
 
 tier:TemporalGroundingProfile a owl:Class ;
     rdfs:label "TemporalGroundingProfile" ;
-    rdfs:comment "Declares owner resolution and temporal admissibility over an external source substrate." .
+    rdfs:comment "Declares owner resolution and temporal admissibility over an external source substrate. Temporal authority only: it says nothing about what a predicate or qualifier dimension means." .
+
+tier:ProfileVocabulary a owl:Class ;
+    rdfs:label "ProfileVocabulary" ;
+    rdfs:comment "A versioned vocabulary declaring entity types, predicates, predicate families, and qualifier dimensions. Semantic authority only: relation identity is scoped to a vocabulary version, temporal state to a grounding-profile version." .
 
 tier:ProvenanceActivity a owl:Class ;
     rdfs:label "ProvenanceActivity" ;
@@ -174,3 +180,8 @@ tier:ownedBy a owl:ObjectProperty ;
 
 tier:groundedBy a owl:ObjectProperty ;
     rdfs:range tier:TemporalGroundingProfile .
+
+tier:usesVocabulary a owl:ObjectProperty ;
+    rdfs:domain tier:TemporalGroundingProfile ;
+    rdfs:range tier:ProfileVocabulary ;
+    rdfs:comment "Records which vocabulary version a deployment binds to a grounding profile. The binding is version-specific; the two documents remain independently versioned." .

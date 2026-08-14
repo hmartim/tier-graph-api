@@ -54,7 +54,37 @@ The API composes these into audit views:
 
 These are structured-data operations. Natural-language rendering is a client concern.
 
-## 9.4 Separation summary
+## 9.4 Execution provenance
+
+Every object that reports a **computed** result — a state, a projection, a path, an
+explanation, a derived analytical artifact — **MUST** identify the exact versions of the
+authorities its semantics depend on, not merely their identifiers:
+
+```text
+⟨profileId, profileVersion, policyId, policyVersion⟩
+```
+
+An identifier alone is rebindable, so a result attributed to one cannot be replayed. This is
+distinct from request convenience: a caller **MAY** name only `profileId` and omit
+`policyId`, letting the deployment resolve its default, but the result **MUST** report the
+resolution that was actually used. Among computed results, `AdmissibilityResult` depends on a
+single versioned authority — the `TemporalGroundingProfile` — and names **no** admission
+policy at all: `admissible_ρ(s, t)` never depends on π, so recording a policy there would
+suggest an influence the contract denies. The policy context belongs to the object that
+consumed the result.
+
+**Identifier versus version.** Declarative references (`EvidenceUnitRef`, `SourceStateRef`)
+are not results and carry no versions. They rely on a premise this specification makes
+explicit: `profileId` denotes a **stable identifier namespace**. Consequently
+`⟨profileId, evidenceUnitId⟩` identifies the same evidence unit, and
+`⟨profileId, sourceStateId⟩` the same source state, across versions of that profile.
+`profileVersion` versions **behavior**: how `owner_ρ` resolves and what `admissible_ρ`
+decides. A change that renames either identifier namespace constitutes a **different
+profile**, not a new version of the same profile. Where a vocabulary-dependent filter was
+applied, ⟨`profileId`, `profileVersion`⟩ resolves to that profile version's `vocabularyRef`
+([08](./08-paths-and-temporal-topology.md)).
+
+## 9.5 Separation summary
 
 | Concept | Object | Answers |
 | ------- | ------ | ------- |

@@ -16,7 +16,7 @@
     },
     "predicate": {
       "type": "string",
-      "description": "The predicate connecting source to target. The specific vocabulary is profile-defined; see `predicateFamily` for the coarse classification.",
+      "description": "The predicate connecting source to target. The specific vocabulary is declared in `ProfileVocabulary.predicates`; see `predicateFamily` for the coarse classification.",
       "minLength": 1
     },
     "targetEntityId": {
@@ -34,17 +34,8 @@
     },
     "predicateFamily": {
       "type": "string",
-      "description": "Coarse classification of the predicate. The base specification recognizes: classificatory, definitional, normativeDependency (deontic dependency), institutional, procedural, factualCausal, attributional, normativeConsequential.",
-      "enum": [
-        "classificatory",
-        "definitional",
-        "normativeDependency",
-        "institutional",
-        "procedural",
-        "factualCausal",
-        "attributional",
-        "normativeConsequential"
-      ]
+      "description": "Optional coarse classification of the predicate, drawn from the controlled vocabulary declared in `ProfileVocabulary.predicateFamilies`. The core fixes NO universal taxonomy of predicate families: it would embed a domain commitment in a domain-independent contract. If this property is present, the value MUST be a family declared by the governing vocabulary, which MUST define its semantics. The vocabulary is therefore fixed and deterministic within a vocabulary version, not across vocabularies.",
+      "minLength": 1
     },
     "canonicalLabel": {
       "type": "string",

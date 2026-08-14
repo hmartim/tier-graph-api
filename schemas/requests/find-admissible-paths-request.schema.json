@@ -15,11 +15,8 @@
     "maxDepth": { "type": "integer", "minimum": 1, "description": "Maximum path length." },
     "predicateFamilies": {
       "type": "array",
-      "description": "Restrict traversal to these predicate families.",
-      "items": {
-        "type": "string",
-        "enum": ["classificatory", "definitional", "normativeDependency", "institutional", "procedural", "factualCausal", "attributional", "normativeConsequential"]
-      }
+      "description": "Restrict traversal to these predicate families. Values are drawn from the ProfileVocabulary bound to the profile named in `profileId`; discover them with `getPredicateFamilies`.",
+      "items": { "type": "string", "minLength": 1 }
     },
     "direction": { "type": "string", "enum": ["outgoing", "incoming", "both"], "description": "Traversal direction." },
     "limit": { "type": "integer", "minimum": 1, "description": "Maximum number of paths to return." }

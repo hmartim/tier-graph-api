@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://spec.tier-graph.org/schemas/core/relation-qualifier.schema.json",
   "title": "RelationQualifier",
-  "description": "A truth-conditional dimension that may affect relation identity. A qualifier records a `dimension` (e.g. polarity, condition, scope, modality, participantRoles, or a profile-defined dimension such as jurisdiction or threshold) together with a `status`. CRITICAL RULES: (1) `status` is one of `specified`, `absent`, or `unknown`; (2) `unknown` MUST NOT be treated as equivalent to `absent`; (3) when `status` is `specified`, a normalized `value` MUST be present; (4) any identity-relevant qualifier whose status is `unknown` MUST block automatic relation merging.",
+  "description": "A truth-conditional dimension that may affect relation identity. A qualifier records a `dimension` (e.g. polarity, condition, scope, modality, participantRoles, or a profile-defined dimension such as jurisdiction or threshold) together with a `status`. CRITICAL RULES: (1) `status` is one of `specified`, `absent`, or `unknown`; (2) `unknown` MUST NOT be treated as equivalent to `absent`; (3) when `status` is `specified`, a normalized `value` MUST be present; (4) any identity-relevant qualifier whose status is `unknown` MUST block automatic relation merging. IDENTITY RELEVANCE IS NOT CARRIED HERE: whether a dimension participates in the identity key is a property of the dimension, declared once in `ProfileVocabulary.qualifierDimensions[].identityRelevant`, not a property of an occurrence. Carrying it on the instance too would admit an instance that contradicts its own vocabulary, with no principled winner; the vocabulary is the sole authority.",
   "type": "object",
   "required": ["dimension", "status"],
   "properties": {
@@ -19,11 +19,6 @@
     "value": {
       "description": "The normalized value of the dimension. REQUIRED when status is `specified`; MUST be omitted otherwise. May be a scalar or a structured value depending on the dimension.",
       "type": ["string", "number", "boolean", "object", "array"]
-    },
-    "identityRelevant": {
-      "type": "boolean",
-      "description": "Whether this dimension participates in relation identity (the merge key). Defaults to true for the minimum truth-conditional dimensions; profiles declare which additional dimensions are identity-relevant.",
-      "default": true
     },
     "note": {
       "type": "string",

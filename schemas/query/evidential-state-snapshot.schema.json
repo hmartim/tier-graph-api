@@ -4,7 +4,7 @@
   "title": "EvidentialStateSnapshot",
   "description": "The computed evidential state of ONE relation at a query time under a profile. It describes REGISTERED evidence under one profile and time; it is NOT a declaration of domain truth. The state is derived from which supporting/refuting evidence bases are admissible at `queryTime` (and optional `observerTime`), never from a copied relation-level interval.",
   "type": "object",
-  "required": ["relationId", "profileId", "queryTime", "state", "supportingEvidenceIds", "refutingEvidenceIds"],
+  "required": ["relationId", "profileId", "profileVersion", "queryTime", "policyId", "policyVersion", "state", "supportingEvidenceIds", "refutingEvidenceIds"],
   "properties": {
     "relationId": {
       "$ref": "../common/identifier.schema.json",
@@ -13,6 +13,11 @@
     "profileId": {
       "$ref": "../common/identifier.schema.json",
       "description": "The grounding profile under which state was computed."
+    },
+    "profileVersion": {
+      "type": "string",
+      "description": "Exact version of that grounding profile. Ids are rebindable; a computed state attributed only to an id cannot be replayed.",
+      "minLength": 1
     },
     "queryTime": {
       "$ref": "../common/temporal-coordinate.schema.json",
@@ -52,7 +57,12 @@
     },
     "policyId": {
       "$ref": "../common/identifier.schema.json",
-      "description": "Optional admission policy relevant to interpreting the snapshot."
+      "description": "The admission policy resolved for this computation. State is State_{π,ρ}(r,t), so π is part of what was computed, not context the caller may omit: when the caller does not name a policy, the deployment's default was resolved and MUST be reported here."
+    },
+    "policyVersion": {
+      "type": "string",
+      "description": "Exact version of that admission policy.",
+      "minLength": 1
     },
     "computedAt": {
       "type": "string",

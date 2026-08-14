@@ -6,8 +6,13 @@ get:
   description: |
     Returns the qualifier dimensions an agent may reason about, and whether each is
     identity-relevant (i.e. participates in the relation identity key and can block merging
-    when `unknown`). The minimum dimensions are polarity, condition, scope, modality, and
-    participantRoles; profiles MAY add more. Pass `profileId` to scope.
+    when `unknown`). The operation reports the identity-relevance declarations of the exact
+    `ProfileVocabulary` named by `vocabularyRef`; the vocabulary defines them, this operation
+    only exposes them, and `RelationQualifier` instances do not override them — an instance
+    carries the dimension, never the flag. The minimum dimensions are polarity, condition,
+    scope, modality, and participantRoles; a vocabulary MAY declare more. Pass `profileId` to
+    scope. Because the answer is the identity key, it is reported against an exact vocabulary
+    version and stays readable after the binding moves.
   parameters:
     - name: profileId
       in: query
@@ -21,17 +26,25 @@ get:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              type: object
-              required: ["dimension", "identityRelevant"]
-              properties:
-                dimension:
-                  type: string
-                  description: "The qualifier dimension name."
-                identityRelevant:
-                  type: boolean
-                  description: "Whether this dimension participates in relation identity."
-                description:
-                  type: string
-              additionalProperties: false
+            type: object
+            required: ["vocabularyRef", "items"]
+            properties:
+              vocabularyRef:
+                $ref: '../../openapi.yaml#/components/schemas/VocabularyRef'
+                description: "The vocabulary version these values were read from."
+              items:
+                type: array
+                items:
+                  type: object
+                  required: ["dimension", "identityRelevant"]
+                  properties:
+                    dimension:
+                      type: string
+                      description: "The qualifier dimension name."
+                    identityRelevant:
+                      type: boolean
+                      description: "Whether this dimension participates in relation identity."
+                    description:
+                      type: string
+                  additionalProperties: false
+            additionalProperties: false

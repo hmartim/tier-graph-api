@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://spec.tier-graph.org/schemas/grounding/temporal-grounding-profile.schema.json",
   "title": "TemporalGroundingProfile",
-  "description": "Declares how an implementation resolves external evidence units to controlled source states and determines temporal admissibility. Conceptually B_π = ⟨U_π, S_π, owner_π, admissible_π⟩. A conforming profile MUST provide two behavioral functions: owner_π(evidenceUnitId) -> SourceStateRef, and admissible_π(sourceStateId, queryTime, observerTime?) -> admissibility result. PROFILE AUTHORITY: the profile DEFINES what temporal admissibility means; the TIER-Graph core MUST NOT override it. This schema describes the profile's DECLARED metadata and capabilities; the functions themselves are exposed through the API's grounding operations.",
+  "description": "Declares how an implementation resolves external evidence units to controlled source states and determines temporal admissibility. Conceptually B_ρ = ⟨U_ρ, S_ρ, owner_ρ, admissible_ρ⟩, matching spec/05 (ρ is the grounding profile; π is the admission policy). A conforming profile MUST provide two behavioral functions: owner_ρ(evidenceUnitId) -> SourceStateRef, and admissible_ρ(sourceStateId, queryTime, observerTime?) -> admissibility result. PROFILE AUTHORITY: the profile DEFINES what temporal admissibility means; the TIER-Graph core MUST NOT override it. This schema describes the profile's DECLARED metadata and capabilities; the functions themselves are exposed through the API's grounding operations.",
   "type": "object",
   "required": ["id", "name", "version", "evidenceUnitType", "sourceStateType", "admissibilitySemantics"],
   "properties": {
@@ -53,6 +53,10 @@
       "type": "array",
       "description": "Temporal-coordinate kinds this profile understands (e.g. 'queryTime', 'observerTime').",
       "items": { "type": "string", "minLength": 1 }
+    },
+    "vocabularyRef": {
+      "$ref": "../common/vocabulary-ref.schema.json",
+      "description": "The ProfileVocabulary version this grounding profile is deployed with. Semantic vocabulary and temporal authority are orthogonal concerns declared in separate documents and versioned independently; this field records which pair a deployment binds, so that profile-scoped introspection and identity reproduction can resolve it. Optional only because a grounding profile MAY be published on its own; a deployment that serves identity comparison, predicates, or predicate-family filters MUST declare it."
     },
     "defaultAdmissionPolicyId": {
       "$ref": "../common/identifier.schema.json",

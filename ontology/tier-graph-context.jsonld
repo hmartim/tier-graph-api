@@ -14,6 +14,7 @@
     "EvidenceUnitRef": "tier:EvidenceUnitRef",
     "SourceStateRef": "tier:SourceStateRef",
     "TemporalGroundingProfile": "tier:TemporalGroundingProfile",
+    "ProfileVocabulary": "tier:ProfileVocabulary",
     "ProvenanceActivity": "tier:ProvenanceActivity",
     "ReviewEvent": "tier:ReviewEvent",
 
@@ -32,6 +33,7 @@
     "hasAnchor": { "@id": "tier:hasAnchor", "@type": "@id" },
     "anchorsUnit": { "@id": "tier:anchorsUnit", "@type": "@id" },
     "ownedBy": { "@id": "tier:ownedBy", "@type": "@id" },
-    "groundedBy": { "@id": "tier:groundedBy", "@type": "@id" }
+    "groundedBy": { "@id": "tier:groundedBy", "@type": "@id" },
+    "usesVocabulary": { "@id": "tier:usesVocabulary", "@type": "@id" }
   }
 }

@@ -1,26 +1,50 @@
 get:
   tags:
     - "Introspection"
-  summary: "Retrieve the predicate families recognized by the base specification."
+  summary: "Retrieve the predicate families declared by a grounding profile."
   operationId: "getPredicateFamilies"
   description: |
-    Returns the coarse predicate families used to filter relations. The base specification
-    recognizes a fixed set; a profile MAY document which of its predicates map to each family.
+    Returns the coarse predicate families used to filter relations and bound path traversal.
+    The core specification fixes NO universal taxonomy of families: they are declared in the
+    `ProfileVocabulary` bound to the profile, which MUST define the semantics of each
+    admitted value. Pass `profileId` to scope the vocabulary; an implementation serving a
+    single profile MAY return that profile's families when it is omitted. Values returned
+    here are the only ones an agent should send to `predicateFamily` filters or to
+    `findAdmissiblePaths.predicateFamilies` for that profile.
+  parameters:
+    - name: profileId
+      in: query
+      required: false
+      description: "Optional profile to scope the vocabulary."
+      schema:
+        $ref: '../../openapi.yaml#/components/schemas/Identifier'
   responses:
     '200':
-      description: "The predicate families."
+      description: "The predicate families declared by the profile."
       content:
         application/json:
           schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - "classificatory"
-                - "definitional"
-                - "normativeDependency"
-                - "institutional"
-                - "procedural"
-                - "factualCausal"
-                - "attributional"
-                - "normativeConsequential"
+            type: object
+            required: ["vocabularyRef", "items"]
+            properties:
+              vocabularyRef:
+                $ref: '../../openapi.yaml#/components/schemas/VocabularyRef'
+                description: "The vocabulary version these values were read from."
+              items:
+                type: array
+                items:
+                  type: object
+                  required: ["family"]
+                  properties:
+                    family:
+                      type: string
+                      description: "The family token, as it appears in `DerivedRelation.predicateFamily`."
+                      minLength: 1
+                    semantics:
+                      type: string
+                      description: "What this family classifies, as declared by the vocabulary."
+                    label:
+                      type: string
+                      description: "Optional human-readable name. Display only."
+                  additionalProperties: false
+            additionalProperties: false
