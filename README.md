@@ -224,6 +224,7 @@ npm run bundle                # produce openapi-bundled.yaml (gitignored)
 npm --prefix scripts install
 npm --prefix scripts run validate:schemas       # JSON Schema 2020-12 (ajv)
 npm --prefix scripts run validate:examples      # example instances
+npm --prefix scripts run validate:profiles      # vocabulary/profile docs + token uniqueness
 npm --prefix scripts run validate:conformance   # conformance defs + no executable payloads
 npm --prefix scripts run guard:private          # reject private/database artifacts
 ```

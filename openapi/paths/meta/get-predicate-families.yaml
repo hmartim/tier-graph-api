@@ -34,7 +34,7 @@ get:
                 type: array
                 items:
                   type: object
-                  required: ["family"]
+                  required: ["family", "semantics"]
                   properties:
                     family:
                       type: string

@@ -6,6 +6,10 @@ get:
   description: |
     Retrieves one `AdmissionPolicy`, including its `admittedStates` and version — so an agent
     can inspect exactly which evidential states a projection will admit before using it.
+
+    Pass `policyVersion` to retrieve an exact past version rather than the current binding,
+    so that a result carrying ⟨`policyId`, `policyVersion`⟩ can be resolved back to the
+    policy that produced it.
   parameters:
     - name: policyId
       in: path
@@ -13,6 +17,7 @@ get:
       description: "Identifier of the admission policy."
       schema:
         $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - $ref: '../../openapi.yaml#/components/parameters/PolicyVersion'
   responses:
     '200':
       description: "The admission policy."

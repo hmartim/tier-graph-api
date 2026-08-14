@@ -7,11 +7,12 @@
   "scripts": {
     "validate:schemas": "node validate_json_schemas.mjs",
     "validate:examples": "node validate_examples.mjs",
+    "validate:profiles": "node validate_profiles.mjs",
     "validate:openapi": "swagger-cli validate ../openapi/openapi.yaml",
     "validate:rdf": "node validate_rdf.mjs",
     "validate:conformance": "node validate_conformance.mjs",
     "guard:private": "node reject_private_artifacts.mjs",
-    "validate:all": "npm run validate:schemas && npm run validate:examples && npm run validate:conformance && npm run guard:private"
+    "validate:all": "npm run validate:schemas && npm run validate:examples && npm run validate:profiles && npm run validate:conformance && npm run guard:private"
   },
   "license": "MIT",
   "devDependencies": {

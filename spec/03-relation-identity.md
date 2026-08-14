@@ -23,6 +23,13 @@ Identity relevance is a property of the *dimension*, not of an occurrence:
 therefore **MUST NOT** carry the flag; the vocabulary is the sole authority, and automatic
 identity comparison is scoped to a fixed vocabulary version and qualifier-schema version.
 
+**Comparison takes a vocabulary.** Because the flag is not on the instance, the identity
+question is `Compare(A, B, V)`, never `Compare(A, B)`: two candidates alone do not determine
+which dimensions must agree. `compareRelationIdentity` and `mergeRelationCandidates`
+therefore **MUST** be given a `vocabularyRef`, and `IdentityComparison` **MUST** report the
+vocabulary version it decided under — the same pair may compare differently once a
+dimension's identity relevance changes.
+
 ## 3.2 When automatic merging is permitted
 
 Two candidates **MAY** be merged automatically only when **all** of the following hold:

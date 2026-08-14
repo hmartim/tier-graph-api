@@ -9,6 +9,8 @@ get:
     `admitted` flag.
   parameters:
     - $ref: '../../openapi.yaml#/components/parameters/ProfileId'
+    - $ref: '../../openapi.yaml#/components/parameters/ProfileVersion'
+    - $ref: '../../openapi.yaml#/components/parameters/PolicyVersion'
     - $ref: '../../openapi.yaml#/components/parameters/At'
     - name: policyId
       in: query

@@ -182,6 +182,19 @@ components:
       description: "Optional observer time for bitemporal evaluation."
       schema:
         $ref: '../schemas/common/temporal-coordinate.schema.json'
+    ProfileVersion:
+      name: profileVersion
+      in: query
+      required: false
+      description: |
+        Pin the execution to an exact grounding-profile version. Omitted, the deployment
+        resolves the current binding and reports it in the result. Supplied, the
+        implementation MUST execute that version or fail with `profile-unavailable` — it
+        MUST NOT silently fall back to another version. This is what makes a provenance
+        record replayable rather than merely attributable.
+      schema:
+        type: string
+        minLength: 1
     PolicyId:
       name: policyId
       in: query
@@ -189,6 +202,16 @@ components:
       description: "Admission policy to apply to the projection."
       schema:
         $ref: '../schemas/common/identifier.schema.json'
+    PolicyVersion:
+      name: policyVersion
+      in: query
+      required: false
+      description: |
+        Pin the execution to an exact admission-policy version, with the same contract as
+        `profileVersion`: execute it or fail, never substitute.
+      schema:
+        type: string
+        minLength: 1
     Cursor:
       name: cursor
       in: query

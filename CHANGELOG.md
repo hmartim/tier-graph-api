@@ -13,6 +13,29 @@ project uses [Semantic Versioning](https://semver.org/) for the *specification* 
 
 ## [Unreleased]
 
+### Fixed (identity operations)
+
+- **`compareRelationIdentity` and `mergeRelationCandidates` now take a `vocabularyRef`, and
+  `IdentityComparison` reports one** (breaking, pre-1.0). Removing `identityRelevant` from
+  `RelationQualifier` left these operations undecidable: two candidates alone no longer say
+  which dimensions must agree, and neither the request nor the endpoint named a vocabulary.
+  Identity comparison is `Compare(A, B, V)`, so the vocabulary reference is required on both
+  the request and the result — the same pair may compare differently once a dimension's
+  identity relevance changes.
+
+### Added (replayability)
+
+- **Optional `profileVersion` / `policyVersion` on operations that compute a result**, and a
+  version parameter on `getGroundingProfile` and `getAdmissionPolicy`. Recording versions on
+  results made them *attributable*; without a way to request those versions again they were
+  not *replayable*, which is what `spec/09.4` claims. Supplied, an implementation MUST
+  execute that version or fail rather than substitute; omitted, it resolves its current
+  binding and reports it.
+- **`scripts/validate_profiles.mjs`** (`npm run validate:profiles`) — validates the
+  vocabulary and grounding-profile documents, which no CI step had covered, and enforces the
+  two constraints JSON Schema cannot express: token uniqueness within each vocabulary list,
+  and that every `predicates[].family` is declared in `predicateFamilies`.
+
 ### Changed
 
 - **`predicateFamily` is no longer a closed core enumeration** (breaking, pre-1.0). The
@@ -30,7 +53,10 @@ project uses [Semantic Versioning](https://semver.org/) for the *specification* 
   objects (`family`, `semantics`, `label`) rather than a fixed enum of strings.
 - **The four vocabulary-introspection responses** (`getPredicates`, `getPredicateFamilies`,
   `getEntityTypes`, `getQualifierDimensions`) are now envelopes `⟨vocabularyRef, items⟩`
-  instead of bare arrays. `profileId` does not identify a vocabulary version — a deployment
+  instead of bare arrays, and their items mirror the `ProfileVocabulary` entries they expose
+  — token plus a required `semantics` and optional `label`, replacing the looser
+  `description` — so that "the introspection operations expose the declared vocabulary"
+  (§11.1) is true of the shapes and not only of the intent. `profileId` does not identify a vocabulary version — a deployment
   may rebind it — so a bare array left a logged answer unattributable, which matters most for
   `getQualifierDimensions`, whose answer *is* the identity key. Admissibility, state, and
   path operations report their configuration in their own results (see below).

@@ -36,15 +36,21 @@ get:
                 type: array
                 items:
                   type: object
-                  required: ["dimension", "identityRelevant"]
+                  required: ["dimension", "semantics", "identityRelevant"]
                   properties:
                     dimension:
                       type: string
-                      description: "The qualifier dimension name."
+                      description: "The qualifier dimension name, matching the key in `DerivedRelation.qualifiers`."
+                      minLength: 1
+                    semantics:
+                      type: string
+                      description: "What this dimension qualifies and what its values range over."
+                      minLength: 1
                     identityRelevant:
                       type: boolean
                       description: "Whether this dimension participates in relation identity."
-                    description:
+                    label:
                       type: string
+                      description: "Optional human-readable name. Display only."
                   additionalProperties: false
             additionalProperties: false

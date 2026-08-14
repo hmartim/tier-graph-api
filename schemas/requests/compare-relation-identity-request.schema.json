@@ -2,10 +2,14 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://spec.tier-graph.org/schemas/requests/compare-relation-identity-request.schema.json",
   "title": "CompareRelationIdentityRequest",
-  "description": "Request body for compareRelationIdentity. Evaluates whether two relation candidates are merge-compatible under the declared identity profile. If any identity-relevant qualifier is `unknown`, the decision MUST NOT be `equivalent` (see spec/03).",
+  "description": "Request body for compareRelationIdentity. Evaluates whether two relation candidates are merge-compatible under a declared vocabulary. Identity comparison is Compare(A, B, V), never Compare(A, B): which qualifier dimensions are identity-relevant is declared by the vocabulary and is NOT carried on the candidates, so a request that names no vocabulary is undecidable. If any identity-relevant qualifier is `unknown`, the decision MUST NOT be `equivalent` (see spec/03).",
   "type": "object",
-  "required": ["candidateA", "candidateB"],
+  "required": ["vocabularyRef", "candidateA", "candidateB"],
   "properties": {
+    "vocabularyRef": {
+      "$ref": "../common/vocabulary-ref.schema.json",
+      "description": "The exact ProfileVocabulary version whose `qualifierDimensions` declarations govern this comparison."
+    },
     "candidateA": { "$ref": "../core/derived-relation.schema.json", "description": "First relation candidate." },
     "candidateB": { "$ref": "../core/derived-relation.schema.json", "description": "Second relation candidate." }
   },

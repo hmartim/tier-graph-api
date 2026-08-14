@@ -9,7 +9,17 @@ The effective profile of an implementation is a **pair**: a `ProfileVocabulary` 
 `TemporalGroundingProfile`. They are orthogonal — the vocabulary fixes *meaning and
 identity*, the grounding profile fixes *temporal authority* — and are versioned
 independently. The same vocabulary MAY be grounded on a different substrate, and the same
-grounding profile MAY serve a different vocabulary. Automatic identity comparison
+grounding profile MAY serve a different vocabulary — but *rebinding is itself a change to the
+grounding profile's deployment document*: `profileVersion` versions that document, including
+its `vocabularyRef`, so pointing the same profile at another vocabulary **MUST** be published
+as a new profile version even when `owner_ρ` and `admissible_ρ` are untouched. The temporal
+semantics `B_ρ` are unchanged by such a bump; what changed is which pair a deployment binds.
+Independence here means the two documents are authored, versioned, and reused separately, not
+that a binding can be swapped invisibly.
+
+Within each list, a token **MUST** be declared once: two entries sharing a token with
+different semantics would leave the sole authority on meaning ambiguous. JSON Schema cannot
+express this, so it is enforced by `scripts/validate_profiles.mjs`. Automatic identity comparison
 ([03](./03-relation-identity.md)) is scoped to a vocabulary version; evidential state
 ([06](./06-evidential-state-and-policies.md)) is scoped to a grounding-profile version.
 

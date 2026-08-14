@@ -6,7 +6,8 @@ get:
   description: |
     Returns the predicate vocabulary an agent may use to form relation queries. The specific
     vocabulary is declared in the `ProfileVocabulary` bound to the profile; pass `profileId`
-    to scope it. Each entry names the predicate and its coarse `predicateFamily`. The
+    to scope it. Each entry mirrors a `ProfileVocabulary.predicates` declaration: the token,
+    its semantics, and optionally the coarse `family` it belongs to. The
     response names the exact vocabulary version it came from, so a logged answer stays
     readable after the binding moves.
   parameters:
@@ -32,15 +33,22 @@ get:
                 type: array
                 items:
                   type: object
-                  required: ["predicate"]
+                  required: ["predicate", "semantics"]
                   properties:
                     predicate:
                       type: string
                       description: "The predicate token."
-                    predicateFamily:
+                      minLength: 1
+                    semantics:
                       type: string
-                      description: "The coarse family this predicate belongs to."
-                    description:
+                      description: "What this predicate asserts of source and target, as declared by the vocabulary."
+                      minLength: 1
+                    family:
                       type: string
+                      description: "Optional coarse family this predicate belongs to; declared in the same vocabulary."
+                      minLength: 1
+                    label:
+                      type: string
+                      description: "Optional human-readable name. Display only."
                   additionalProperties: false
             additionalProperties: false

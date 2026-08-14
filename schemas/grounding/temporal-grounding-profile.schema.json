@@ -56,7 +56,7 @@
     },
     "vocabularyRef": {
       "$ref": "../common/vocabulary-ref.schema.json",
-      "description": "The ProfileVocabulary version this grounding profile is deployed with. Semantic vocabulary and temporal authority are orthogonal concerns declared in separate documents and versioned independently; this field records which pair a deployment binds, so that profile-scoped introspection and identity reproduction can resolve it. Optional only because a grounding profile MAY be published on its own; a deployment that serves identity comparison, predicates, or predicate-family filters MUST declare it."
+      "description": "The ProfileVocabulary version this grounding profile is deployed with. Semantic vocabulary and temporal authority are orthogonal concerns declared in separate documents and versioned independently; this field records which pair a deployment binds, so that profile-scoped introspection and identity reproduction can resolve it. Optional only because a grounding profile MAY be published on its own; a deployment that serves identity comparison, predicates, or predicate-family filters MUST declare it. NOTE: `version` versions this deployment document, this field included, so rebinding to another vocabulary requires a new profile version even when owner and admissibility are untouched. The temporal semantics B_ρ are unaffected by such a bump."
     },
     "defaultAdmissionPolicyId": {
       "$ref": "../common/identifier.schema.json",

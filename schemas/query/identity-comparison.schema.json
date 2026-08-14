@@ -4,8 +4,12 @@
   "title": "IdentityComparison",
   "description": "The result of compareRelationIdentity. RULE: if any identity-relevant qualifier is `unknown`, the decision MUST NOT be `equivalent` — it is `unresolved`, and `blockingDimensions` names the offending dimensions (see spec/03).",
   "type": "object",
-  "required": ["decision"],
+  "required": ["vocabularyRef", "decision"],
   "properties": {
+    "vocabularyRef": {
+      "$ref": "../common/vocabulary-ref.schema.json",
+      "description": "The exact ProfileVocabulary version the comparison was decided under. A decision is a computed result scoped to a vocabulary version: the same two candidates may compare differently once a dimension's identity relevance changes."
+    },
     "decision": {
       "type": "string",
       "description": "equivalent (merge-compatible), distinct (differ on an identity dimension), or unresolved (blocked by an unknown identity-relevant qualifier).",

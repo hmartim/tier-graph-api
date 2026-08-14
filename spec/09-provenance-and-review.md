@@ -67,7 +67,16 @@ authorities its semantics depend on, not merely their identifiers:
 An identifier alone is rebindable, so a result attributed to one cannot be replayed. This is
 distinct from request convenience: a caller **MAY** name only `profileId` and omit
 `policyId`, letting the deployment resolve its default, but the result **MUST** report the
-resolution that was actually used. Among computed results, `AdmissibilityResult` depends on a
+resolution that was actually used.
+
+**Attribution is not yet replay.** Recording the versions makes a result *attributable*; it
+becomes *replayable* only if the caller can ask for those versions again. Operations that
+compute a result therefore accept optional `profileVersion` and `policyVersion`, and
+`getGroundingProfile` and `getAdmissionPolicy` accept a version to retrieve a past document.
+When a version is supplied, an implementation **MUST** execute that version or fail
+(`profile-unavailable`); it **MUST NOT** silently substitute another. When it is omitted, the
+deployment resolves its current binding and reports it. An implementation that cannot serve
+past versions is still conformant for attribution, but **MUST NOT** claim replayability. Among computed results, `AdmissibilityResult` depends on a
 single versioned authority — the `TemporalGroundingProfile` — and names **no** admission
 policy at all: `admissible_ρ(s, t)` never depends on π, so recording a policy there would
 suggest an influence the contract denies. The policy context belongs to the object that

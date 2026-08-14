@@ -9,6 +9,7 @@ get:
     and prospective impact analysis.
   parameters:
     - $ref: '../../openapi.yaml#/components/parameters/ProfileId'
+    - $ref: '../../openapi.yaml#/components/parameters/ProfileVersion'
     - $ref: '../../openapi.yaml#/components/parameters/At'
     - name: direction
       in: query
@@ -18,6 +19,7 @@ get:
         type: string
         enum: ["before", "at", "after", "around"]
     - $ref: '../../openapi.yaml#/components/parameters/PolicyId'
+    - $ref: '../../openapi.yaml#/components/parameters/PolicyVersion'
     - $ref: '../../openapi.yaml#/components/parameters/Cursor'
   responses:
     '200':

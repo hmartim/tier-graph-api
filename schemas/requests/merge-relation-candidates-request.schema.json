@@ -4,8 +4,12 @@
   "title": "MergeRelationCandidatesRequest",
   "description": "Request body for mergeRelationCandidates (optional authoring). This operation SHOULD require explicit review authorization and MUST NOT merge candidates if an identity-relevant qualifier is unresolved (`unknown`).",
   "type": "object",
-  "required": ["relationIds"],
+  "required": ["vocabularyRef", "relationIds"],
   "properties": {
+    "vocabularyRef": {
+      "$ref": "../common/vocabulary-ref.schema.json",
+      "description": "The exact ProfileVocabulary version under which merge compatibility is to be judged. Merge compatibility is an identity decision, so it inherits the scoping of compareRelationIdentity: without a vocabulary there is no fact of the matter about which dimensions must agree."
+    },
     "relationIds": {
       "type": "array",
       "description": "The relation candidates to merge. All MUST be merge-compatible per spec/03.",

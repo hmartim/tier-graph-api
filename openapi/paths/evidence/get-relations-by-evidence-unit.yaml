@@ -25,7 +25,9 @@ get:
       description: "Optional query time for time-indexed results."
       schema:
         $ref: '../../openapi.yaml#/components/schemas/TemporalCoordinate'
+    - $ref: '../../openapi.yaml#/components/parameters/ProfileVersion'
     - $ref: '../../openapi.yaml#/components/parameters/PolicyId'
+    - $ref: '../../openapi.yaml#/components/parameters/PolicyVersion'
     - $ref: '../../openapi.yaml#/components/parameters/Cursor'
   responses:
     '200':

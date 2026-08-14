@@ -15,9 +15,11 @@ get:
       schema:
         $ref: '../../openapi.yaml#/components/schemas/Identifier'
     - $ref: '../../openapi.yaml#/components/parameters/ProfileId'
+    - $ref: '../../openapi.yaml#/components/parameters/ProfileVersion'
     - $ref: '../../openapi.yaml#/components/parameters/At'
     - $ref: '../../openapi.yaml#/components/parameters/ObserverTime'
     - $ref: '../../openapi.yaml#/components/parameters/PolicyId'
+    - $ref: '../../openapi.yaml#/components/parameters/PolicyVersion'
   responses:
     '200':
       description: "The structured state explanation."

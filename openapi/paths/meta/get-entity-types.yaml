@@ -31,11 +31,18 @@ get:
                 type: array
                 items:
                   type: object
-                  required: ["entityType"]
+                  required: ["entityType", "semantics"]
                   properties:
                     entityType:
                       type: string
-                    description:
+                      description: "The type token, as it appears in `DerivedEntity.entityType`."
+                      minLength: 1
+                    semantics:
                       type: string
+                      description: "What this type classifies, as declared by the vocabulary."
+                      minLength: 1
+                    label:
+                      type: string
+                      description: "Optional human-readable name. Display only."
                   additionalProperties: false
             additionalProperties: false
