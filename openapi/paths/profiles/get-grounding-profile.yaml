@@ -7,7 +7,7 @@ get:
     Returns one `TemporalGroundingProfile`, including its declared `admissibilitySemantics`
     — the authoritative definition of what "admissible at time t" means for this profile.
 
-    Pass `version` to retrieve an exact past version rather than the current binding. This
+    Pass `profileVersion` to retrieve an exact past version rather than the current binding. This
     is what makes a provenance record walkable: a result carrying ⟨`profileId`,
     `profileVersion`⟩ can be resolved back to the profile document that produced it, and
     hence to the `vocabularyRef` in force at that time.

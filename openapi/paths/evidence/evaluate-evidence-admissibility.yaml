@@ -16,7 +16,6 @@ get:
         $ref: '../../openapi.yaml#/components/schemas/Identifier'
     - $ref: '../../openapi.yaml#/components/parameters/ProfileId'
     - $ref: '../../openapi.yaml#/components/parameters/ProfileVersion'
-    - $ref: '../../openapi.yaml#/components/parameters/PolicyVersion'
     - $ref: '../../openapi.yaml#/components/parameters/At'
     - $ref: '../../openapi.yaml#/components/parameters/ObserverTime'
   responses:

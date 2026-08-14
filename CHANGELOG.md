@@ -30,7 +30,22 @@ project uses [Semantic Versioning](https://semver.org/) for the *specification* 
   results made them *attributable*; without a way to request those versions again they were
   not *replayable*, which is what `spec/09.4` claims. Supplied, an implementation MUST
   execute that version or fail rather than substitute; omitted, it resolves its current
-  binding and reports it.
+  binding and reports it. The grounding operations (`resolveSourceState`,
+  `evaluateSourceStateAdmissibility`, `evaluateEvidenceAdmissibility`,
+  `evaluateBatchEvidenceAdmissibility`) take `profileVersion` and no policy parameter,
+  matching `AdmissibilityResult`: `admissible_ρ` is a function of ρ alone. A version pins an
+  identifier, so supplying one without its id is malformed.
+- **`SourceStateResolution`** (`schemas/grounding/source-state-resolution.schema.json`) —
+  `resolveSourceState` returns it instead of a bare `SourceStateRef`. Once the operation
+  became version-pinnable, its response could not honour the rule that the resolved version
+  is reported in the result: `profileVersion` versions grounding *behavior*, so two versions
+  of one profile may resolve the same evidence unit to different source states, and a stored
+  payload naming only the profile could not say which did. The envelope carries `profileId`,
+  `profileVersion`, and the `sourceState`; `SourceStateRef` stays a versionless declarative
+  reference, keeping identity of the external resource apart from provenance of the
+  resolution. No policy is named: owner resolution never depends on π. Since both levels name
+  a profile, `sourceState.profileId` MUST equal the enclosing `profileId`; JSON Schema cannot
+  express field equality, so implementations and conformance runs enforce it.
 - **`scripts/validate_profiles.mjs`** (`npm run validate:profiles`) — validates the
   vocabulary and grounding-profile documents, which no CI step had covered, and enforces the
   two constraints JSON Schema cannot express: token uniqueness within each vocabulary list,

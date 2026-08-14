@@ -39,6 +39,10 @@ jobs:
         working-directory: scripts
         run: npm run validate:examples
 
+      - name: Validate profile and vocabulary documents
+        working-directory: scripts
+        run: npm run validate:profiles
+
       - name: Validate conformance definitions
         working-directory: scripts
         run: npm run validate:conformance

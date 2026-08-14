@@ -86,6 +86,20 @@ exist so that callers and auditors can understand the substrate a profile ground
 - `resolveSourceState` results **MUST** come from the profile. TIER-Graph **MUST NOT**
   fabricate or infer a competing source state.
 
+**The operation returns a resolution, not a bare reference.** `resolveSourceState` responds
+with a `SourceStateResolution` — the `SourceStateRef` plus the exact `profileVersion` that
+produced it. Since `profileVersion` versions grounding *behavior*, two versions of one
+profile may legitimately resolve the same evidence unit to different source states, and a
+stored payload that named only the profile could not say which one resolved it. The
+`SourceStateRef` itself stays versionless: `⟨profileId, sourceStateId⟩` identifies the same
+source state across versions ([09.4](./09-provenance-and-review.md)). Identity of the
+external resource and provenance of the resolution are separate concerns.
+
+Because both levels name a profile, one invariant holds: `SourceStateResolution.profileId`
+**MUST** equal `SourceStateResolution.sourceState.profileId`. One resolution names one
+profile; a mismatch is non-conformant. JSON Schema cannot express equality between two
+fields, so an implementation **MUST** enforce it and a conformance run **SHOULD** test it.
+
 ## 5.6 Admissibility evaluation
 
 `admissible_ρ(sourceStateId, queryTime, observerTime?)` returns an `AdmissibilityResult`

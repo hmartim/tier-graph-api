@@ -13,6 +13,7 @@
       "items": { "$ref": "../common/identifier.schema.json" }
     },
     "profileId": { "$ref": "../common/identifier.schema.json", "description": "Grounding profile." },
+    "profileVersion": { "type": "string", "description": "Optional pin to an exact grounding-profile version; supplied, the implementation MUST evaluate under that version or fail rather than substitute another. This operation MUST preserve the semantics of the single-evidence call, pinning included. No admission policy participates: admissibility is a function of ρ alone.", "minLength": 1 },
     "at": { "$ref": "../common/temporal-coordinate.schema.json", "description": "Query time." },
     "observerTime": { "$ref": "../common/temporal-coordinate.schema.json", "description": "Optional observer time (bitemporal)." }
   },

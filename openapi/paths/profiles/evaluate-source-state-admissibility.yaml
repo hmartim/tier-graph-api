@@ -14,6 +14,7 @@ get:
       description: "Identifier of the grounding profile."
       schema:
         $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - $ref: '../../openapi.yaml#/components/parameters/ProfileVersion'
     - name: sourceStateId
       in: path
       required: true

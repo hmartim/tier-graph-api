@@ -99,6 +99,8 @@ components:
       $ref: '../schemas/grounding/evidence-selector.schema.json'
     SourceStateRef:
       $ref: '../schemas/grounding/source-state-ref.schema.json'
+    SourceStateResolution:
+      $ref: '../schemas/grounding/source-state-resolution.schema.json'
     TemporalGroundingProfile:
       $ref: '../schemas/grounding/temporal-grounding-profile.schema.json'
     AdmissionPolicy:
@@ -192,6 +194,10 @@ components:
         implementation MUST execute that version or fail with `profile-unavailable` — it
         MUST NOT silently fall back to another version. This is what makes a provenance
         record replayable rather than merely attributable.
+
+        A version pins an identifier, so it MUST NOT be supplied without the corresponding
+        `profileId`; a request that does is malformed (`400`). Where `profileId` is a
+        required path or query parameter this is automatic.
       schema:
         type: string
         minLength: 1
@@ -208,7 +214,9 @@ components:
       required: false
       description: |
         Pin the execution to an exact admission-policy version, with the same contract as
-        `profileVersion`: execute it or fail, never substitute.
+        `profileVersion`: execute it or fail, never substitute, and MUST NOT be supplied
+        without the corresponding `policyId` — which is itself optional on most operations,
+        so this is the case where the rule bites.
       schema:
         type: string
         minLength: 1

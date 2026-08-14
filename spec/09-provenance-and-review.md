@@ -75,7 +75,13 @@ compute a result therefore accept optional `profileVersion` and `policyVersion`,
 `getGroundingProfile` and `getAdmissionPolicy` accept a version to retrieve a past document.
 When a version is supplied, an implementation **MUST** execute that version or fail
 (`profile-unavailable`); it **MUST NOT** silently substitute another. When it is omitted, the
-deployment resolves its current binding and reports it. An implementation that cannot serve
+deployment resolves its current binding and reports it. A version pins an identifier and is
+meaningless without it: `profileVersion` **MUST NOT** be supplied without `profileId`, nor
+`policyVersion` without `policyId`, and a request that does is malformed. Grounding
+operations (`resolveSourceState`, `evaluateSourceStateAdmissibility`,
+`evaluateEvidenceAdmissibility`, `evaluateBatchEvidenceAdmissibility`) accept
+`profileVersion` and **no** policy parameter at all, since `admissible_ρ` is a function of ρ
+alone. An implementation that cannot serve
 past versions is still conformant for attribution, but **MUST NOT** claim replayability. Among computed results, `AdmissibilityResult` depends on a
 single versioned authority — the `TemporalGroundingProfile` — and names **no** admission
 policy at all: `admissible_ρ(s, t)` never depends on π, so recording a policy there would
@@ -83,7 +89,9 @@ suggest an influence the contract denies. The policy context belongs to the obje
 consumed the result.
 
 **Identifier versus version.** Declarative references (`EvidenceUnitRef`, `SourceStateRef`)
-are not results and carry no versions. They rely on a premise this specification makes
+are not results and carry no versions. Where owner resolution is *executed*, the version
+attaches to the result that wraps the reference — `SourceStateResolution` — never to the
+reference itself. They rely on a premise this specification makes
 explicit: `profileId` denotes a **stable identifier namespace**. Consequently
 `⟨profileId, evidenceUnitId⟩` identifies the same evidence unit, and
 `⟨profileId, sourceStateId⟩` the same source state, across versions of that profile.

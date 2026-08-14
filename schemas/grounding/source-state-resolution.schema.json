@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.tier-graph.org/schemas/grounding/source-state-resolution.schema.json",
+  "title": "SourceStateResolution",
+  "description": "The result of executing owner_ρ(evidenceUnitId): the source state a profile version resolved an evidence unit to, together with the profile version that resolved it. This is a COMPUTED RESULT and follows the provenance rule of spec/09.4, whereas the SourceStateRef it wraps stays a versionless declarative reference — ⟨profileId, sourceStateId⟩ identifies the same source state across versions of a profile. The two are kept apart deliberately: `profileVersion` versions grounding BEHAVIOR, so two versions of one profile may legitimately resolve the same evidence unit to different source states, and a payload stored on its own would otherwise not say which version produced it. Only the grounding profile is named here: owner resolution never depends on an admission policy. INVARIANT: `sourceState.profileId` MUST equal the enclosing `profileId` — one resolution names one profile, and a mismatch is non-conformant. JSON Schema cannot express equality between two fields, so this is a normative rule enforced by implementations and their conformance tests, not by this document.",
+  "type": "object",
+  "required": ["profileId", "profileVersion", "sourceState"],
+  "properties": {
+    "profileId": {
+      "$ref": "../common/identifier.schema.json",
+      "description": "The grounding profile that performed the resolution. MUST equal `sourceState.profileId`."
+    },
+    "profileVersion": {
+      "type": "string",
+      "description": "Exact version of that profile — the version pinned by the caller, or the one the deployment resolved when no pin was given.",
+      "minLength": 1
+    },
+    "sourceState": {
+      "$ref": "./source-state-ref.schema.json",
+      "description": "The resolved owning source state."
+    }
+  },
+  "additionalProperties": false
+}

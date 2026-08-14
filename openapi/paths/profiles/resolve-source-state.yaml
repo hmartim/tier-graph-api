@@ -9,6 +9,11 @@ get:
 
     **Conformance rule:** the result MUST come from the profile. TIER-Graph MUST NOT
     fabricate or infer a competing source state.
+
+    The response is a `SourceStateResolution`: the resolved `SourceStateRef` plus the exact
+    profile version that resolved it. Since `profileVersion` versions grounding behavior,
+    two versions of one profile may legitimately resolve the same evidence unit to different
+    source states, so the resolution — not the reference — carries the version.
   parameters:
     - name: profileId
       in: path
@@ -16,6 +21,7 @@ get:
       description: "Identifier of the grounding profile."
       schema:
         $ref: '../../openapi.yaml#/components/schemas/Identifier'
+    - $ref: '../../openapi.yaml#/components/parameters/ProfileVersion'
     - name: evidenceUnitId
       in: path
       required: true
@@ -24,10 +30,10 @@ get:
         $ref: '../../openapi.yaml#/components/schemas/Identifier'
   responses:
     '200':
-      description: "The owning source state."
+      description: "The owning source state and the profile version that resolved it."
       content:
         application/json:
           schema:
-            $ref: '../../openapi.yaml#/components/schemas/SourceStateRef'
+            $ref: '../../openapi.yaml#/components/schemas/SourceStateResolution'
     '404':
       $ref: '../../openapi.yaml#/components/responses/NotFound'
